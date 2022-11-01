@@ -55,7 +55,7 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка">
       <section className="section">
-        <Input maxLength={11} value={inputValue} onChange={onChangeValue} />
+        <Input maxLength={11} value={inputValue} onChange={onChangeValue} type="text" isLimitText ={true}/>
         <Button
           text="Развернуть"
           linkedList={"small"}
@@ -63,7 +63,7 @@ export const StringComponent: React.FC = () => {
           isLoader={loader}
           disabled={!inputValue}
         />
-        <p className="stringSubtitle">Максимум — 11 символов</p>
+{/*         <p className="stringSubtitle">Максимум — 11 символов</p> */}
       </section>
       <ul className="list">
         {reverseInputValue &&

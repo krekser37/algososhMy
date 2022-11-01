@@ -44,8 +44,8 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <section className="section">
-        <Input maxLength={19} value={inputValue} onChange={onChangeValue} />
+      <section className="sectionfib">
+        <Input maxLength={19} value={inputValue} onChange={onChangeValue} isLimitText ={true} max={19} type="number"/>
         <Button
           text="Рассчитать"
           linkedList={"small"}
@@ -53,7 +53,6 @@ export const FibonacciPage: React.FC = () => {
           isLoader={loader}
           disabled={!inputValue}
         />
-        <p className="stringSubtitle">Максимум — 19 символов</p>
       </section>
       <ul className="listfib">
         {arr &&
