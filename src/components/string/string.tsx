@@ -6,12 +6,12 @@ import { Circle } from "../ui/circle/circle";
 import "./string.css";
 import { ElementStates } from "../../types/element-states";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { delay, swap } from "../../utils/utils";
+import { delay, swap, TArray } from "../../utils/utils";
 
-export type TArray = {
+/* export type TArray = {
   value: string;
   color: ElementStates;
-};
+}; */
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
