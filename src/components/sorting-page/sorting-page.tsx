@@ -57,13 +57,11 @@ export const SortingPage: React.FC = () => {
 
     for (let i = 0; i < arr.length; i++) {
       let index = i;
-
       for (let j = i + 1; j < arr.length; j++) {
         arr[i].color = ElementStates.Changing;
         arr[j].color = ElementStates.Changing;
         setArr([...arr]);
         await delay(DELAY_IN_MS);
-
         if (sorting === Direction.Ascending) {
           if (arr[j].state < arr[index].state) {
             index = j;
@@ -71,7 +69,6 @@ export const SortingPage: React.FC = () => {
             setArr([...arr]);
           }
         }
-
         if (sorting === Direction.Descending) {
           if (arr[j].state > arr[index].state) {
             index = j;
@@ -79,26 +76,48 @@ export const SortingPage: React.FC = () => {
             setArr([...arr]);
           }
         }
-
         arr[j].color = ElementStates.Default;
         arr[i].color = ElementStates.Default;
-
         setArr([...arr]);
       }
       arr[index].color = ElementStates.Modified;
       swap(arr, i, index);
       console.log("arr[i]=", arr[i]);
-
       setArr([...arr]);
     }
-
-    setArr([...arr]);
     setLoader(false);
   };
 
-  const bubbleSort = async (arr: TArraySort[], sorting: Direction)=> {
+  const bubbleSort = async (arr: TArraySort[], sorting: Direction) => {
+    setLoader(true);
 
-  }
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0; j < arr.length - i - 1; j++) {
+        arr[j].color = ElementStates.Changing;
+        arr[j + 1].color = ElementStates.Changing;
+        setArr([...arr]);
+        await delay(DELAY_IN_MS);
+        if (sorting === Direction.Ascending) {
+          if (arr[j].state > arr[j + 1].state) {
+            swap(arr, j, j + 1);
+          }
+        }
+        if (sorting === Direction.Descending) {
+          if (arr[j].state < arr[j + 1].state) {
+            swap(arr, j, j + 1);
+          }
+        }
+        arr[j].color = ElementStates.Default;
+        arr[j + 1].color = ElementStates.Default;
+        setArr([...arr]);
+      }
+      const length = arr.length;
+      arr[length - i - 1].color = ElementStates.Modified;
+      setArr([...arr]);
+    }
+    setArr([...arr]);
+    setLoader(false);
+  };
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -108,7 +127,6 @@ export const SortingPage: React.FC = () => {
             label="Выбор"
             name="radioButton"
             value="choice"
-            /* type="radio" id="choice"  */
             checked={radioInput === "choice"}
             onChange={OnChange}
           />
@@ -116,7 +134,6 @@ export const SortingPage: React.FC = () => {
             label="Пузырёк"
             name="radioButton"
             value="bubble"
-            /* type="radio" id="bubble"  */
             checked={radioInput === "bubble"}
             onChange={OnChange}
           />
