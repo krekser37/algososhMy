@@ -45,45 +45,48 @@ export const SortingPage: React.FC = () => {
 
   const sortingOnClick = (sorting: Direction) => {
     setSorting(sorting);
-
     if (radioInput === "choice") {
-      if (sorting === Direction.Ascending) {
-        choiceAscendingSort(arr);
-      } else {
-        /* choiceDescendingSort(arr); */
-      }
+      choiceSort(arr, sorting);
     } else {
-      if (sorting === Direction.Ascending) {
-        /* bubbleAscendingSort(arr); */
-      } else {
-        /*  bubbleDescendingSort(arr); */
-      }
+      bubbleSort(arr, sorting);
     }
   };
 
-  const choiceAscendingSort = async (arr: TArraySort[]) => {
+  const choiceSort = async (arr: TArraySort[], sorting: Direction) => {
     setLoader(true);
-   
+
     for (let i = 0; i < arr.length; i++) {
-      let indexMin = i;
+      let index = i;
 
       for (let j = i + 1; j < arr.length; j++) {
         arr[i].color = ElementStates.Changing;
         arr[j].color = ElementStates.Changing;
         setArr([...arr]);
         await delay(DELAY_IN_MS);
-        if (arr[j].state < arr[indexMin].state) {
-          indexMin = j;
-          swap(arr, j, indexMin);
-          setArr([...arr]);
+
+        if (sorting === Direction.Ascending) {
+          if (arr[j].state < arr[index].state) {
+            index = j;
+            swap(arr, j, index);
+            setArr([...arr]);
+          }
         }
+
+        if (sorting === Direction.Descending) {
+          if (arr[j].state > arr[index].state) {
+            index = j;
+            swap(arr, j, index);
+            setArr([...arr]);
+          }
+        }
+
         arr[j].color = ElementStates.Default;
         arr[i].color = ElementStates.Default;
 
         setArr([...arr]);
       }
-      arr[indexMin].color = ElementStates.Modified;
-      swap(arr, i, indexMin);
+      arr[index].color = ElementStates.Modified;
+      swap(arr, i, index);
       console.log("arr[i]=", arr[i]);
 
       setArr([...arr]);
@@ -92,6 +95,10 @@ export const SortingPage: React.FC = () => {
     setArr([...arr]);
     setLoader(false);
   };
+
+  const bubbleSort = async (arr: TArraySort[], sorting: Direction)=> {
+
+  }
 
   return (
     <SolutionLayout title="Сортировка массива">
@@ -134,9 +141,9 @@ export const SortingPage: React.FC = () => {
             disabled={loader}
           />
         </fieldset>
-        <Button text="Новый массив"  onClick={onClick} disabled={loader}/>
+        <Button text="Новый массив" onClick={onClick} disabled={loader} />
       </div>
-      <ul className={styles.content} >
+      <ul className={styles.content}>
         {arr &&
           arr?.map((item, index) => {
             return (
