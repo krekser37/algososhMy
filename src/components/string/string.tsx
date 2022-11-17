@@ -63,7 +63,6 @@ export const StringComponent: React.FC = () => {
           isLoader={loader}
           disabled={!inputValue}
         />
-{/*         <p className="stringSubtitle">Максимум — 11 символов</p> */}
       </section>
       <ul className="list">
         {reverseInputValue &&
