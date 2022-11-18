@@ -10,3 +10,9 @@
 .input {
   max-width: 204px;
 }
+
+.listItem{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}

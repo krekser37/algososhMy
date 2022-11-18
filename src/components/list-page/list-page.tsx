@@ -21,8 +21,8 @@ const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
 );
 
 export const ListPage: React.FC = () => {
-  // const {inputValue, setInputValue}= useState("");
-  // const {inputIndex, setInputIndex}= useState("");
+ const [inputValue, setInputValue]= useState("");
+ const [inputIndex, setInputIndex]= useState("");
 
   const initialArr: TArrayList[] = randomArr.map((item) => ({
     value: item,
@@ -34,14 +34,14 @@ export const ListPage: React.FC = () => {
 
   /*  const list = new LinkedList(randomArr); */
 
-  /*   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const onChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
     setInputIndex(e.target.value);
   };
- */
+
 
   return (
     <SolutionLayout title="Связный список">
@@ -52,8 +52,8 @@ export const ListPage: React.FC = () => {
           type="text"
           isLimitText={true}
           extraClass={styles.input}
-          /* onChange={onChangeValue}
-          value={inputValue}  */
+          onChange={onChangeValue}
+          value={inputValue} 
         />
         <Button text="Добавить в head" linkedList="big" />
         <Button text="Добавить в tail" linkedList="big" />
@@ -63,8 +63,8 @@ export const ListPage: React.FC = () => {
       <section className={styles.section}>
         <Input
           extraClass={styles.input}
-          placeholder="Введите индекс" /*  onChange={onChangeIndex}
-          value={inputIndex }*/
+          placeholder="Введите индекс"  onChange={onChangeIndex}
+          value={inputIndex }
         />
         <Button text="Добавить по индексу" linkedList="big" />
         <Button text="Удалить по индексу" linkedList="big" />
@@ -73,9 +73,9 @@ export const ListPage: React.FC = () => {
         {arr &&
           arr?.map((item, index) => {
             return (
-              <li className="" key={index}>
+              <li  key={index} className={styles.listItem}>
                 <Circle letter={item?.value} state={item?.color} />
-                <ArrowIcon />
+                {index !== arr?.length - 1 &&<ArrowIcon />}
               </li>
             );
           })}
