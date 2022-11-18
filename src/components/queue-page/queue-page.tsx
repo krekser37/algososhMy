@@ -12,6 +12,7 @@ import styles from "./queue.module.css";
 type TArrayQueue = {
   value?: string;
   color: ElementStates;
+  head?: string;
 };
 
 const emptyQueue = Array.from({ length: 7 }, () => ({
@@ -26,6 +27,7 @@ interface IQueue<T> {
   getTail: () => number;
   getHead: () => number;
   isFull: () => boolean;
+  getSize: () => number;
   getElements: () => Array<T | null>;
 }
 class Queue<T> implements IQueue<T> {
@@ -54,8 +56,11 @@ class Queue<T> implements IQueue<T> {
       throw new Error("No elements in the queue");
     }
     this.container[this.head % this.size] = null;
-    this.head = (this.head + 1) % this.size;
     this.length--;
+
+    if (this.head !== this.size-1 && this.head !== this.tail) {
+      this.head++;
+    }
   };
 
   peak = (): T | null => {
@@ -80,6 +85,8 @@ class Queue<T> implements IQueue<T> {
   isEmpty = () => this.length === 0;
 
   isFull = () => this.length >= this.size;
+
+  getSize = () => this.container.length;
 
   clear = () => {
     this.head = 0;
@@ -115,22 +122,20 @@ export const QueuePage: React.FC = () => {
     setInputValue("");
     setDisables(false);
   };
- 
 
   const onClickDequeue = async () => {
     await delay(SHORT_DELAY_IN_MS);
     queue.peak();
     setQueue(queue);
     const item = queue.peak();
-    console.log(item);
-    
     if (item) item.color = ElementStates.Changing;
     setArr([...queue.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
     queue.dequeue();
-    console.log(queue.getTail());
-    console.log(queue.getHead());
     if (item) item.color = ElementStates.Default;
+/*     if (item && queue.getSize() === queue.getHead()) {
+      item.head = "head";
+    } */
     setArr([...queue.getElements()]);
     setDisables(false);
   };
@@ -192,8 +197,15 @@ export const QueuePage: React.FC = () => {
                 <Circle
                   letter={item?.value}
                   state={item?.color}
-                  head={index === queue.getHead() && !queue.isEmpty() ? "head" : ""}
-                  tail={index === queue.getTail() - 1 && !queue.isEmpty()? "tail" : "" }
+                  /* head={
+                    index === queue.getHead() && queue.isEmpty() ? "" : "head"
+                  } */
+                  head={(index === queue.getHead() && !queue.isEmpty()) ? "head" : ""}
+                  tail={
+                    index === queue.getTail() - 1 && !queue.isEmpty()
+                      ? "tail"
+                      : ""
+                  }
                   index={index}
                 />
               </li>
