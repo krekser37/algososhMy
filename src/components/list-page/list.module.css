@@ -1,0 +1,12 @@
+.section {
+  display: flex;
+  gap: 12px;
+  column-gap: 12px;
+  margin: 0 auto;
+  max-width: 952px;
+  margin-bottom: 12px;
+}
+
+.input {
+  max-width: 204px;
+}

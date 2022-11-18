@@ -19,6 +19,7 @@ const emptyQueue = Array.from({ length: 7 }, () => ({
   value: "",
   color: ElementStates.Default,
 }));
+
 interface IQueue<T> {
   enqueue: (item: T) => void;
   dequeue: () => void;
