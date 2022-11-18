@@ -116,10 +116,15 @@ export const QueuePage: React.FC = () => {
     queue.enqueue({ value: inputValue, color: ElementStates.Changing });
     setQueue(queue);
     setArr([...queue.getElements()]);
+    console.log([...queue.getElements()]);
+    
+    console.log(queue);
     await delay(SHORT_DELAY_IN_MS);
-    const items = queue.getElements();
+/*     const items = queue.getElements();
     const item = items[queue.getTail() - 1];
     if (item) item.color = ElementStates.Default;
+    console.log(item); */
+    
     setInputValue("");
     setDisables(false);
   };
