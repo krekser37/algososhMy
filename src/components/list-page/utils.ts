@@ -9,53 +9,101 @@ export class Node<T> {
 
 
 interface ILinkedList<T> {
-    prepend: (element: T) => void;
-    append: (element: T) => void;
+    append: (element: T) => void; /* Добавить в конец */
+    prepend: (element: T) => void; /* Добавить в начало */
+    deleteHead: () => void;
+    deleteTail: () => void;
+
     /*     addByIndex: () => void;
         deleteByIndex: () => void;
-        deleteHead: () => void;
-        deleteTail: () => void;
+        
+        
         toArray: () => number; */
+
+    /*  size: number; */
 
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
-    /*     private container: (T | null)[] = []; */
+    private container: (T | null)[] = [];
     private head: Node<T> | null;
     private tail: Node<T> | null;
-    /* private size: number; */
+    length: number;
     /*     private readonly size: number = 0;
         private length: number = 0; */
 
-    constructor(elements: T[]) {
+    constructor(randomArr: T[]) {
         this.head = null;
         this.tail = null;
-        /* this.size = 0; */
-        /*  this.container = Array(size); */
+        this.length = 0;
+        randomArr.forEach((item) => {
+            this.append(item)
+        })
     }
 
-    prepend = (element: T) => {
-
+    /* Добавить в конец */
+    append = (value: T) => {
+        const node = new Node(value);
+        if (!this.head || !this.tail) {
+            this.head = node;
+            this.tail = node;
+        }
+        this.tail.next = node;
+        this.tail = node;
+        this.length++;
     }
 
-    append = (element: T) => {
-        /* const node = new Node(element) */
+    /* Добавить в начало */
+    prepend = (value: T) => {
+        const node = new Node(value);
+        if (!this.head || !this.tail) {
+            this.head = node;
+            this.tail = node;
+        }
+        this.head.next = node;
+        this.head = node;
+        this.length++;
     }
 
+    deleteHead = () => {
+        if (!this.head) {
+            return null;
+        }
+        this.head = this.head.next;
+        this.length--;
+    }
+
+    deleteTail= () => {
+        if (!this.tail) {
+            return null;
+        }
+        let curr = this.head;
+        while (curr?.next?.next) {
+            curr = curr.next;
+            curr.next = null;
+        }
+        this.length--;
+    }
     /* addByIndex: () => {
     
     }
     deleteByIndex: () => {
     
     }
-    deleteHead: () => {
-    
+
+
+     */
+    toArray() {
+        let curr = this.head;
+        let res: T[] = [];
+        while (curr) {
+            res.push(curr.value);
+            curr = curr.next;
+        }
+        console.log(res);
+        return res;
     }
-    deleteTail: () => {
-    
-    }
-    
-    toArray: () => {
-    
-    } */
+
+    /*  get size() {return this.length}; */
+
 }

@@ -15,4 +15,17 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  position: relative;
+}
+
+.top{
+  position: absolute;
+  top: -65px;
+  left: 12px;
+}
+
+.bottom{
+  position: absolute;
+  bottom: -105px;
+  left: 12px;
 }
