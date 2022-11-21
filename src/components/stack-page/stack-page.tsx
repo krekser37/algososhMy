@@ -69,11 +69,9 @@ export const StackPage: React.FC = () => {
     setInputValue("");
     setArr([...stack.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
-    console.log(stack.peak());
 
     const stackPeak = stack.peak();
     if (stackPeak) stackPeak.color = ElementStates.Default;
-    console.log(arr);
     setDisables(false);
     setArr([...stack.getElements()]);
   };

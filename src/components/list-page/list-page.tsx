@@ -41,10 +41,18 @@ const arrList: TArrList[] = randomArr.map((item) => ({
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [inputIndex, setInputIndex] = useState("");
+  const [inputIndex, setInputIndex] = useState<string>("");
   const [arr, setArr] = useState<TArrList[]>(arrList);
   const list = new LinkedList(randomArr);
-  console.log(arr);
+  const [loader,setLoader]=useState({
+    loaderAddHead:false,
+    loaderAddTail:false,
+    loaderDeleteHead:false,
+    loaderDeleteTail:false,
+    loaderAddIndex:false,
+    loaderDeleteIndex:false,
+  })
+  const [disabled, setDisabled]=useState(false)
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -55,6 +63,8 @@ export const ListPage: React.FC = () => {
   };
 
   const onClickAddTail = async () => {
+    setLoader({ ...loader, loaderAddTail: true })
+    setDisabled(true);
     list.append(inputValue);
     arr[arr.length - 1] = {
       ...arr[arr.length - 1],
@@ -66,7 +76,6 @@ export const ListPage: React.FC = () => {
       },
     };
     setArr([...arr]);
-    console.log([...arr]);
     await delay(SHORT_DELAY_IN_MS);
     arr[arr.length - 1] = {
       ...arr[arr.length - 1],
@@ -81,9 +90,12 @@ export const ListPage: React.FC = () => {
     arr[arr.length - 1].color = ElementStates.Default;
     setArr([...arr]);
     setInputValue("");
+    setLoader({ ...loader, loaderAddTail: false })
+    setDisabled(false);
   };
 
   const onClickAddHead = async () => {
+    setLoader({ ...loader, loaderAddHead: true })
     list.prepend(inputValue);
     arr[0] = {
       ...arr[0],
@@ -95,7 +107,6 @@ export const ListPage: React.FC = () => {
       },
     };
     setArr([...arr]);
-    console.log([...arr]);
     await delay(SHORT_DELAY_IN_MS);
     arr[0] = {
       ...arr[0],
@@ -110,9 +121,13 @@ export const ListPage: React.FC = () => {
     arr[0].color = ElementStates.Default;
     setArr([...arr]);
     setInputValue("");
+    setLoader({ ...loader, loaderAddHead: false })
+    setDisabled(false);
   };
 
   const onClickDeleteHead = async () => {
+    setDisabled(true);
+    setLoader({ ...loader, loaderDeleteHead: true })
     list.deleteHead();
     arr[0] = {
       ...arr[0],
@@ -128,11 +143,104 @@ export const ListPage: React.FC = () => {
     await delay(SHORT_DELAY_IN_MS);
     arr.shift();
     setArr([...arr]);
+    setLoader({ ...loader, loaderDeleteHead: false })
+    setDisabled(false);
   };
 
   const onClickDeleteTail = async () => {
+    setDisabled(true);
+    setLoader({ ...loader, loaderDeleteTail: true })
+    list.deleteTail();
+    arr[arr.length - 1] = {
+      ...arr[arr.length - 1],
+      value: "",
+      newItem: {
+        value: arr[arr.length - 1].value,
+        color: ElementStates.Changing,
+        location: "bottom",
+        isSmall: true,
+      },
+    };
+    setArr([...arr]);
+    await delay(SHORT_DELAY_IN_MS);
+    arr.pop();
+    setArr([...arr]);
+    setLoader({ ...loader, loaderDeleteTail: false })
+    setDisabled(false);
+  };
 
-    
+  const onClickAddIndex = async () => {
+    setLoader({ ...loader, loaderAddIndex: true })
+    if (inputIndex) {
+      let index = Number(inputIndex);
+      list.addByIndex(inputValue, index);
+      for (let i = 0; i <= index; i++) {
+        arr[i] = {
+          ...arr[i],
+          color: ElementStates.Changing,
+          newItem: {
+            value: inputValue,
+            color: ElementStates.Changing,
+            location: "top",
+            isSmall: true,
+          },
+        };
+
+        setArr([...arr]);
+        await delay(SHORT_DELAY_IN_MS);
+        arr[i] = {
+          ...arr[i],
+          newItem: null,
+        };
+        setArr([...arr]);
+      }
+      arr.forEach((item) => (item.color = ElementStates.Default));
+      arr.splice(index, 0, {
+        value: inputValue,
+        color: ElementStates.Modified,
+        newItem: null,
+      });
+      setArr([...arr]);
+      await delay(SHORT_DELAY_IN_MS);
+      arr.forEach((item) => (item.color = ElementStates.Default));
+      setArr([...arr]);
+      setInputValue("");
+      setInputIndex("");
+      setLoader({ ...loader, loaderAddIndex: false })
+      setDisabled(false);
+    }
+  };
+  const onClickDeleteIndex = async () => {
+    setLoader({ ...loader, loaderDeleteIndex: true })
+    let index = Number(inputIndex);
+    list.deleteByIndex(index);
+    for (let i = 0; i <= index; i++) {
+      arr[i] = {
+        ...arr[i],
+        color: ElementStates.Changing,
+      };
+      await delay(SHORT_DELAY_IN_MS);
+      setArr([...arr]);
+    }
+    arr[index] = {
+      ...arr[index],
+      value: "",
+      color: ElementStates.Default,
+      newItem: {
+        value: arr[index].value,
+        color: ElementStates.Changing,
+        location: "bottom",
+        isSmall: true,
+      },
+    };
+    setArr([...arr]);
+    await delay(SHORT_DELAY_IN_MS);
+    arr.splice(index, 1);
+    arr.forEach((item) => (item.color = ElementStates.Default));
+    setArr([...arr]);
+    setInputIndex("");
+    setLoader({ ...loader, loaderDeleteIndex: false })
+    setDisabled(false);
   };
 
   return (
@@ -146,6 +254,7 @@ export const ListPage: React.FC = () => {
           extraClass={styles.input}
           onChange={onChangeValue}
           value={inputValue}
+          disabled={disabled}
         />
         <Button
           text="Добавить в head"
@@ -153,6 +262,8 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             onClickAddHead();
           }}
+          isLoader={loader.loaderAddHead}
+          disabled={!inputValue}
         />
         <Button
           text="Добавить в tail"
@@ -160,6 +271,8 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             onClickAddTail();
           }}
+          isLoader={loader.loaderAddTail}
+          disabled={!inputValue}
         />
         <Button
           text="Удалить из head"
@@ -167,6 +280,8 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             onClickDeleteHead();
           }}
+          isLoader={loader.loaderDeleteHead}
+          disabled={arr.length === 0}
         />
         <Button
           text="Удалить из tail"
@@ -174,6 +289,8 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             onClickDeleteTail();
           }}
+          isLoader={loader.loaderDeleteTail}
+          disabled={arr.length === 0}
         />
       </section>
       <section className={styles.section}>
@@ -182,9 +299,26 @@ export const ListPage: React.FC = () => {
           placeholder="Введите индекс"
           onChange={onChangeIndex}
           value={inputIndex}
+          disabled={disabled}
         />
-        <Button text="Добавить по индексу" linkedList="big" />
-        <Button text="Удалить по индексу" linkedList="big" />
+        <Button
+          text="Добавить по индексу"
+          linkedList="big"
+          onClick={() => {
+            onClickAddIndex();
+          }}
+          isLoader={loader.loaderAddIndex}
+          disabled={!inputIndex || !inputValue}
+        />
+        <Button
+          text="Удалить по индексу"
+          linkedList="big"
+          onClick={() => {
+            onClickDeleteIndex();
+          }}
+          isLoader={loader.loaderDeleteIndex}
+          disabled={!inputIndex }
+        />
       </section>
       <ul className="list">
         {arr &&
@@ -199,18 +333,12 @@ export const ListPage: React.FC = () => {
                     extraClass={`${styles[`${item.newItem.location}`]}`}
                   />
                 )}
-
                 <Circle
                   letter={item?.value}
                   state={item?.color}
                   index={index}
-                  head={
-                    /* showHead(index) */ index === 0 && !item ? "head" : ""
-                  }
-                  tail={
-                    /* showTail(index) */ index === arr.length - 1 ? "tail" : ""
-                  }
-                  /* extraClass={`${styles[`${item.location}`]}`} */
+                  head={index === 0 && !item.newItem ? "head" : ""}
+                  tail={index === arr.length - 1 && !item.newItem ? "tail" : ""}
                 />
                 {index !== arr?.length - 1 && <ArrowIcon />}
               </li>

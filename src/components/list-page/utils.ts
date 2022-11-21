@@ -13,15 +13,8 @@ interface ILinkedList<T> {
     prepend: (element: T) => void; /* Добавить в начало */
     deleteHead: () => void;
     deleteTail: () => void;
-
-    /*     addByIndex: () => void;
-        deleteByIndex: () => void;
-        
-        
-        toArray: () => number; */
-
-    /*  size: number; */
-
+    addByIndex: (element: T, index: number | undefined) => void;
+    deleteByIndex: (index: number) => void;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
@@ -29,14 +22,12 @@ export class LinkedList<T> implements ILinkedList<T> {
     private head: Node<T> | null;
     private tail: Node<T> | null;
     length: number;
-    /*     private readonly size: number = 0;
-        private length: number = 0; */
 
-    constructor(randomArr: T[]) {
+    constructor(randomArr?: T[]) {
         this.head = null;
         this.tail = null;
         this.length = 0;
-        randomArr.forEach((item) => {
+        randomArr?.forEach((item) => {
             this.append(item)
         })
     }
@@ -47,10 +38,12 @@ export class LinkedList<T> implements ILinkedList<T> {
         if (!this.head || !this.tail) {
             this.head = node;
             this.tail = node;
+            return this;
         }
         this.tail.next = node;
         this.tail = node;
         this.length++;
+        return this;
     }
 
     /* Добавить в начало */
@@ -58,52 +51,114 @@ export class LinkedList<T> implements ILinkedList<T> {
         const node = new Node(value);
         if (!this.head || !this.tail) {
             this.head = node;
-            this.tail = node;
+            // this.head.next = null;
+            this.tail = null;
+            return this;
         }
         this.head.next = node;
         this.head = node;
         this.length++;
+        return this;
     }
 
     deleteHead = () => {
         if (!this.head) {
             return null;
         }
-        this.head = this.head.next;
+        const delNode = this.head;
+        if (this.head.next) {
+            this.head = this.head.next;
+        } else {
+            this.head = null;
+            this.tail = null;
+        }
         this.length--;
+        return delNode;
     }
 
-    deleteTail= () => {
+    deleteTail = () => {
         if (!this.tail) {
             return null;
         }
-        let curr = this.head;
-        while (curr?.next?.next) {
-            curr = curr.next;
-            curr.next = null;
+        let delNode = this.tail;
+
+        if (this.head === this.tail) {
+            this.head = null;
+            this.tail = null;
+            return delNode;
+        }
+        let currNode = this.head;
+        while (currNode?.next) {
+            if (!currNode?.next.next) {
+                this.tail = currNode;
+                currNode.next = null;
+            } else {
+                currNode = currNode.next;
+            }
         }
         this.length--;
     }
-    /* addByIndex: () => {
-    
+
+    addByIndex = (element: T, index: number | undefined) => {
+        if (index) {
+            if (index < 0 || index > this.length) {
+                console.log('Enter a valid index');
+                return;
+            } else {
+                const addNode = new Node(element);
+                if (index === 0) {
+                    addNode.next = this.head;
+                    this.head = addNode;
+                } else {
+                    let curr = this.head;
+                    let currIndex = 0;
+                    // перебрать элементы в списке до нужной позиции
+                    while (currIndex < index) {
+                        currIndex++;
+                        if (curr?.next && currIndex !== index) {
+                            curr = curr?.next;
+                        }
+                    }
+                    if (curr) {
+                        addNode.next = curr.next;
+                        curr.next = addNode;
+                    }
+                    this.length++;
+                }
+            }
+        }
+
     }
-    deleteByIndex: () => {
-    
+    deleteByIndex = (index: number) => {
+        if (index >= 0 && index < this.length && this.head) {
+            let curr = this.head;
+            let previous = curr;
+            let currIndex = 0;
+            if (index === 0) {
+                this.head = curr.next;
+            } else {
+                while (currIndex < index) {
+                    currIndex++
+                    if (curr.next) {
+                        previous = curr;
+                        curr = curr.next;
+                    }
+                }
+                previous.next = curr.next;
+            }
+            this.length--;
+        }
     }
 
 
-     */
-    toArray() {
+    /* toArray() {
         let curr = this.head;
         let res: T[] = [];
         while (curr) {
             res.push(curr.value);
             curr = curr.next;
         }
-        console.log(res);
         return res;
-    }
-
-    /*  get size() {return this.length}; */
+    } */
 
 }
