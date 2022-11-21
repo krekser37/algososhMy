@@ -25,7 +25,6 @@ export const FibonacciPage: React.FC = () => {
     for (let i = 2; i < n + 1; i++) {
       arr.push(arr[i - 2] + arr[i - 1]);
     }
-    /* console.log(arr); */
     return arr;
   };
 
@@ -35,7 +34,6 @@ export const FibonacciPage: React.FC = () => {
     const arr = fib(Number(inputValue));
     for (let i = 0; i <= arr.length; i++) {
       await delay(SHORT_DELAY_IN_MS);
-     /*  console.log(arr[i]); */
       setArr(arr.slice(0,i));
     }
     setLoader(false);

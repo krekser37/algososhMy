@@ -19,6 +19,7 @@ const emptyQueue = Array.from({ length: 7 }, () => ({
   value: "",
   color: ElementStates.Default,
 }));
+
 interface IQueue<T> {
   enqueue: (item: T) => void;
   dequeue: () => void;
@@ -58,7 +59,7 @@ class Queue<T> implements IQueue<T> {
     this.container[this.head % this.size] = null;
     this.length--;
 
-    if (this.head !== this.size-1 && this.head !== this.tail) {
+    if (this.head !== this.size - 1 && this.head !== this.tail) {
       this.head++;
     }
   };
@@ -99,8 +100,13 @@ class Queue<T> implements IQueue<T> {
 export const QueuePage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [arr, setArr] = useState<(TArrayQueue | null)[]>([]);
-  const [disabled, setDisables] = useState(true);
+  const [disabled, setDisables] = useState(false);
   const [queue, setQueue] = useState(new Queue<TArrayQueue>(7));
+  const [loader, setLoader] = useState({
+    add: false,
+    delete: false,
+    clear: false,
+  });
 
   useEffect(() => {
     setArr(emptyQueue);
@@ -112,18 +118,19 @@ export const QueuePage: React.FC = () => {
   };
 
   const onClickEnqueue = async () => {
+    setLoader({ ...loader, add: true });
     queue.enqueue({ value: inputValue, color: ElementStates.Changing });
     setQueue(queue);
     setArr([...queue.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
-    const items = queue.getElements();
-    const item = items[queue.getTail() - 1];
-    if (item) item.color = ElementStates.Default;
     setInputValue("");
+    setLoader({ ...loader, add: false });
     setDisables(false);
   };
 
   const onClickDequeue = async () => {
+    setLoader({ ...loader, delete: true });
+    setDisables(true);
     await delay(SHORT_DELAY_IN_MS);
     queue.peak();
     setQueue(queue);
@@ -133,17 +140,20 @@ export const QueuePage: React.FC = () => {
     await delay(SHORT_DELAY_IN_MS);
     queue.dequeue();
     if (item) item.color = ElementStates.Default;
-/*     if (item && queue.getSize() === queue.getHead()) {
-      item.head = "head";
-    } */
     setArr([...queue.getElements()]);
+    setLoader({ ...loader, delete: false });
     setDisables(false);
   };
 
-  const onClickClear = () => {
+  const onClickClear = async () => {
+    setLoader({ ...loader, clear: true });
+    setDisables(true);
+    await delay(SHORT_DELAY_IN_MS);
     setArr(emptyQueue);
     queue.clear();
     setQueue(queue);
+    setDisables(false);
+    setLoader({ ...loader, clear: false });
   };
 
   return (
@@ -163,7 +173,7 @@ export const QueuePage: React.FC = () => {
           onClick={() => {
             onClickEnqueue();
           }}
-          /*  isLoader={loader} */
+          isLoader={loader.add}
           disabled={!inputValue || queue.isFull()}
           extraClass={styles.button}
         />
@@ -173,8 +183,8 @@ export const QueuePage: React.FC = () => {
           onClick={() => {
             onClickDequeue();
           }}
-          /*  isLoader={loader} */
-          disabled={disabled || !arr.length}
+          isLoader={loader.delete}
+          disabled={disabled || queue.isEmpty()}
           extraClass={styles.button}
         />
         <Button
@@ -184,8 +194,8 @@ export const QueuePage: React.FC = () => {
             onClickClear();
           }}
           type="reset"
-          /*    isLoader={loader} */
-          disabled={disabled || !arr.length}
+          isLoader={loader.clear}
+          disabled={disabled || queue.isEmpty()}
           extraClass={styles.button}
         />
       </section>
@@ -197,10 +207,9 @@ export const QueuePage: React.FC = () => {
                 <Circle
                   letter={item?.value}
                   state={item?.color}
-                  /* head={
-                    index === queue.getHead() && queue.isEmpty() ? "" : "head"
-                  } */
-                  head={(index === queue.getHead() && !queue.isEmpty()) ? "head" : ""}
+                  head={
+                    index === queue.getHead() && !queue.isEmpty() ? "head" : ""
+                  }
                   tail={
                     index === queue.getTail() - 1 && !queue.isEmpty()
                       ? "tail"

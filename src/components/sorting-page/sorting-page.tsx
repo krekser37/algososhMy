@@ -25,12 +25,10 @@ export const SortingPage: React.FC = () => {
     const minLen = 3;
     const maxLen = 17;
     let length = randomNumber(minLen, maxLen);
-    console.log("length", length);
 
     for (let i = 0; i < length; i++) {
       arr.push({ state: randomNumber(0, 100), color: ElementStates.Default });
     }
-    console.log(arr);
     setLoader(false);
     return arr;
   };
@@ -82,7 +80,6 @@ export const SortingPage: React.FC = () => {
       }
       arr[index].color = ElementStates.Modified;
       swap(arr, i, index);
-      console.log("arr[i]=", arr[i]);
       setArr([...arr]);
     }
     setLoader(false);

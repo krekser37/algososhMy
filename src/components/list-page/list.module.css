@@ -1,0 +1,31 @@
+.section {
+  display: flex;
+  gap: 12px;
+  column-gap: 12px;
+  margin: 0 auto;
+  max-width: 952px;
+  margin-bottom: 12px;
+}
+
+.input {
+  max-width: 204px;
+}
+
+.listItem{
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+}
+
+.top{
+  position: absolute;
+  top: -65px;
+  left: 12px;
+}
+
+.bottom{
+  position: absolute;
+  bottom: -105px;
+  left: 12px;
+}
