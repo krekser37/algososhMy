@@ -107,11 +107,13 @@ export const ListPage: React.FC = () => {
       },
     };
     setArr([...arr]);
+
     await delay(SHORT_DELAY_IN_MS);
     arr[0] = {
       ...arr[0],
       newItem: null,
     };
+    list.deleteTail();
     arr.unshift({
       value: inputValue,
       color: ElementStates.Modified,

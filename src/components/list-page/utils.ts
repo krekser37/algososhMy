@@ -51,13 +51,13 @@ export class LinkedList<T> implements ILinkedList<T> {
         const node = new Node(value);
         if (!this.head || !this.tail) {
             this.head = node;
-            // this.head.next = null;
-            this.tail = null;
+            //this.head.next = null;
+            this.tail = node;
             return this;
         }
         this.head.next = node;
         this.head = node;
-        this.length++;
+      /*   this.length++; */
         return this;
     }
 

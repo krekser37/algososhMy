@@ -195,7 +195,7 @@ export const QueuePage: React.FC = () => {
           }}
           type="reset"
           isLoader={loader.clear}
-          disabled={queue.isEmpty()}
+          disabled={disabled || queue.isEmpty()}
           extraClass={styles.button}
         />
       </section>

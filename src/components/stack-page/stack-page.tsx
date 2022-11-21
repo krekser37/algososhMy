@@ -58,13 +58,19 @@ export const StackPage: React.FC = () => {
   const [arr, setArr] = useState<TArrayStack[]>([]);
   const [stack] = useState(new Stack<TArrayStack>());
   const [disabled, setDisables] = useState(true);
+  const [loader, setLoader] = useState({
+    add: false,
+    delete: false,
+    clear: false,
+  });
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
-    setDisables(true);
   };
 
   const onClickPush = async () => {
+    setLoader({ ...loader, add: true });
+    setDisables(true);
     stack.push({ value: inputValue, color: ElementStates.Changing });
     setInputValue("");
     setArr([...stack.getElements()]);
@@ -74,20 +80,30 @@ export const StackPage: React.FC = () => {
     if (stackPeak) stackPeak.color = ElementStates.Default;
     setDisables(false);
     setArr([...stack.getElements()]);
+    setLoader({ ...loader, add: false });
   };
 
-  const onClickClear = () => {
+  const onClickClear = async () => {
+    setLoader({ ...loader, clear: true });
+    setDisables(true);
+    await delay(SHORT_DELAY_IN_MS);
     stack.clear();
     setArr([]);
+    setDisables(false);
+    setLoader({ ...loader, clear: false });
   };
 
   const onClickPop = async () => {
+    setLoader({ ...loader, delete: true });
+    setDisables(true);
     const stackPeak = stack.peak();
     if (stackPeak) stackPeak.color = ElementStates.Changing;
     setArr([...stack.getElements()]);
     await delay(SHORT_DELAY_IN_MS);
     stack.pop();
     setArr([...stack.getElements()]);
+    setLoader({ ...loader, delete: false });
+    setDisables(false);
   };
 
   return (
@@ -107,7 +123,7 @@ export const StackPage: React.FC = () => {
           onClick={() => {
             onClickPush();
           }}
-          /*  isLoader={loader} */
+          isLoader={loader.add}
           disabled={!inputValue}
           extraClass={styles.button}
         />
@@ -117,7 +133,7 @@ export const StackPage: React.FC = () => {
           onClick={() => {
             onClickPop();
           }}
-          /*  isLoader={loader} */
+          isLoader={loader.delete}
           disabled={disabled || !arr.length}
           extraClass={styles.button}
         />
@@ -128,7 +144,7 @@ export const StackPage: React.FC = () => {
             onClickClear();
           }}
           type="reset"
-          /*    isLoader={loader} */
+          isLoader={loader.clear}
           disabled={disabled || !arr.length}
           extraClass={styles.button}
         />
