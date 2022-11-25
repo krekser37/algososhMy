@@ -19,3 +19,8 @@ export const swap = (arr: TArray[] | TArraySort[], firstIndex: number, secondInd
     arr[firstIndex] = arr[secondIndex];
     arr[secondIndex] = temp;
 };
+
+export const randomNumber = (min: number, max: number): number => {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+

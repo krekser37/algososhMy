@@ -1,7 +1,12 @@
-import React, { ChangeEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import { ElementStates } from "../../types/element-states";
-import { delay } from "../../utils/utils";
+import {  Step } from "../../types/element-states";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
@@ -9,63 +14,100 @@ import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 import styles from "./list.module.css";
-import { LinkedList } from "./utils";
+import { OperationTypes } from "./types";
+import { LinkedList } from "./linked-list";
+import { addHead, getLetterElementHead, getLetterState } from "./utils";
 
-type TNewItem = {
+/* type TNewItem = {
   value?: string;
   color?: ElementStates;
   location?: "top" | "bottom";
   isSmall?: boolean;
-};
+}; */
 
-type TArrList = {
+/* type TArrList = {
   value: string;
   color: ElementStates;
   location?: "top" | "bottom";
   isSmall?: boolean;
   newItem?: TNewItem | null;
-};
+}; */
 
-const randomNumber = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
+/* const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
   String(randomNumber(0, 99))
-);
+); */
+const randomArr = ["0", "34", "8", "1"];
+console.log(randomArr);
 
-const arrList: TArrList[] = randomArr.map((item) => ({
+/* const arrList: TArrList[] = randomArr.map((item) => ({
   value: item,
   color: ElementStates.Default,
-}));
+})); */
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [inputIndex, setInputIndex] = useState<string>("");
-  const [arr, setArr] = useState<TArrList[]>(arrList);
-  const list = new LinkedList(randomArr);
-  const [loader,setLoader]=useState({
-    loaderAddHead:false,
-    loaderAddTail:false,
-    loaderDeleteHead:false,
-    loaderDeleteTail:false,
-    loaderAddIndex:false,
-    loaderDeleteIndex:false,
-  })
-  const [disabled, setDisabled]=useState(false)
+  const list = useRef(new LinkedList(randomArr));
+  const intervalId = useRef<NodeJS.Timeout>();
+  const [steps, setSteps] = useState<Step<string>[]>([
+    { list: list.current.toArray() },
+  ]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [currentOperation, setCurrentOperation] =
+    useState<OperationTypes | null>(null);
+
+  /*   const [loader, setLoader] = useState({
+    loaderAddHead: false,
+    loaderAddTail: false,
+    loaderDeleteHead: false,
+    loaderDeleteTail: false,
+    loaderAddIndex: false,
+    loaderDeleteIndex: false,
+  });
+  const [disabled, setDisabled] = useState(false); */
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputValue(e.currentTarget.value);
   };
 
   const onChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputIndex(e.target.value);
+    setInputIndex(e.currentTarget.value);
   };
 
-  const onClickAddTail = async () => {
+  useEffect(() => {
+    if (!currentOperation) return;
+    let steps: Step<string>[] = [];
+    console.log(steps);
+
+    if (currentOperation === OperationTypes.AddHead) {
+      steps = addHead<string>(inputValue, list.current);
+      console.log(steps);
+    }
+    if (steps.length > 1) {
+      setSteps(steps);
+      setCurrentStep(0);
+      intervalId.current = setInterval(() => {
+        console.log(currentStep, steps.length);
+        
+        setCurrentStep((currentStep) => {
+          if (currentStep === steps.length-1 && intervalId.current) {
+            clearInterval(intervalId.current);
+            setCurrentOperation(null);
+            setSteps([steps[steps.length-1]])
+            setInputValue("");
+            return 0;
+          }
+
+          return currentStep + 1;
+        });
+      }, SHORT_DELAY_IN_MS);
+    }
+  }, [currentOperation, inputValue]);
+
+  /*   const onClickAddTail = async () => {
     setLoader({ ...loader, loaderAddTail: true })
     setDisabled(true);
-    list.append(inputValue);
+    list.current.append(inputValue);
     arr[arr.length - 1] = {
       ...arr[arr.length - 1],
       newItem: {
@@ -92,11 +134,11 @@ export const ListPage: React.FC = () => {
     setInputValue("");
     setLoader({ ...loader, loaderAddTail: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickAddHead = async () => {
+  /*   const onClickAddHead = async () => {
     setLoader({ ...loader, loaderAddHead: true })
-    list.prepend(inputValue);
+    list.current.prepend(inputValue);
     arr[0] = {
       ...arr[0],
       newItem: {
@@ -113,7 +155,7 @@ export const ListPage: React.FC = () => {
       ...arr[0],
       newItem: null,
     };
-    list.deleteTail();
+    list.current.deleteTail();
     arr.unshift({
       value: inputValue,
       color: ElementStates.Modified,
@@ -125,12 +167,12 @@ export const ListPage: React.FC = () => {
     setInputValue("");
     setLoader({ ...loader, loaderAddHead: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickDeleteHead = async () => {
+  /*   const onClickDeleteHead = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteHead: true })
-    list.deleteHead();
+    list.current.deleteHead();
     arr[0] = {
       ...arr[0],
       value: "",
@@ -147,12 +189,12 @@ export const ListPage: React.FC = () => {
     setArr([...arr]);
     setLoader({ ...loader, loaderDeleteHead: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickDeleteTail = async () => {
+  /*   const onClickDeleteTail = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteTail: true })
-    list.deleteTail();
+    list.current.deleteTail();
     arr[arr.length - 1] = {
       ...arr[arr.length - 1],
       value: "",
@@ -169,13 +211,13 @@ export const ListPage: React.FC = () => {
     setArr([...arr]);
     setLoader({ ...loader, loaderDeleteTail: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickAddIndex = async () => {
+  /*   const onClickAddIndex = async () => {
     setLoader({ ...loader, loaderAddIndex: true })
     if (inputIndex) {
       let index = Number(inputIndex);
-      list.addByIndex(inputValue, index);
+      list.current.addByIndex(inputValue, index);
       for (let i = 0; i <= index; i++) {
         arr[i] = {
           ...arr[i],
@@ -211,11 +253,12 @@ export const ListPage: React.FC = () => {
       setLoader({ ...loader, loaderAddIndex: false })
       setDisabled(false);
     }
-  };
-  const onClickDeleteIndex = async () => {
+  }; */
+
+  /*  const onClickDeleteIndex = async () => {
     setLoader({ ...loader, loaderDeleteIndex: true })
     let index = Number(inputIndex);
-    list.deleteByIndex(index);
+    list.current.deleteByIndex(index);
     for (let i = 0; i <= index; i++) {
       arr[i] = {
         ...arr[i],
@@ -243,7 +286,7 @@ export const ListPage: React.FC = () => {
     setInputIndex("");
     setLoader({ ...loader, loaderDeleteIndex: false })
     setDisabled(false);
-  };
+  }; */
 
   return (
     <SolutionLayout title="Связный список">
@@ -256,43 +299,43 @@ export const ListPage: React.FC = () => {
           extraClass={styles.input}
           onChange={onChangeValue}
           value={inputValue}
-          disabled={disabled}
+          /* disabled={disabled} */
         />
         <Button
           text="Добавить в head"
           linkedList="big"
           onClick={() => {
-            onClickAddHead();
+            setCurrentOperation(OperationTypes.AddHead);
           }}
-          isLoader={loader.loaderAddHead}
+          /*  isLoader={loader.loaderAddHead} */
           disabled={!inputValue}
         />
         <Button
           text="Добавить в tail"
           linkedList="big"
-          onClick={() => {
+          /* onClick={() => {
             onClickAddTail();
-          }}
-          isLoader={loader.loaderAddTail}
+          }} */
+          /*  isLoader={loader.loaderAddTail} */
           disabled={!inputValue}
         />
         <Button
           text="Удалить из head"
           linkedList="big"
-          onClick={() => {
+          /* onClick={() => {
             onClickDeleteHead();
-          }}
-          isLoader={loader.loaderDeleteHead}
-          disabled={arr.length === 0}
+          }} */
+          /* isLoader={loader.loaderDeleteHead} */
+          /* disabled={arr.length === 0} */
         />
         <Button
           text="Удалить из tail"
           linkedList="big"
-          onClick={() => {
+          /* onClick={() => {
             onClickDeleteTail();
-          }}
-          isLoader={loader.loaderDeleteTail}
-          disabled={arr.length === 0}
+          }} */
+          /* isLoader={loader.loaderDeleteTail} */
+          /* disabled={arr.length === 0} */
         />
       </section>
       <section className={styles.section}>
@@ -301,52 +344,43 @@ export const ListPage: React.FC = () => {
           placeholder="Введите индекс"
           onChange={onChangeIndex}
           value={inputIndex}
-          disabled={disabled}
+          /* disabled={disabled} */
         />
         <Button
           text="Добавить по индексу"
           linkedList="big"
-          onClick={() => {
+          /*  onClick={() => {
             onClickAddIndex();
-          }}
-          isLoader={loader.loaderAddIndex}
+          }} */
+          /*  isLoader={loader.loaderAddIndex} */
           disabled={!inputIndex || !inputValue}
         />
         <Button
           text="Удалить по индексу"
           linkedList="big"
-          onClick={() => {
+          /* onClick={() => {
             onClickDeleteIndex();
-          }}
-          isLoader={loader.loaderDeleteIndex}
-          disabled={!inputIndex }
+          }} */
+          /* isLoader={loader.loaderDeleteIndex} */
+          disabled={!inputIndex}
         />
       </section>
-      <ul className="list">
-        {arr &&
-          arr?.map((item, index) => {
-            return (
-              <li key={index} className={styles.listItem}>
-                {item.newItem && (
-                  <Circle
-                    letter={item.newItem.value}
-                    state={item.newItem.color}
-                    isSmall={item.newItem.isSmall}
-                    extraClass={`${styles[`${item.newItem.location}`]}`}
-                  />
-                )}
-                <Circle
-                  letter={item?.value}
-                  state={item?.color}
-                  index={index}
-                  head={index === 0 && !item.newItem ? "head" : ""}
-                  tail={index === arr.length - 1 && !item.newItem ? "tail" : ""}
-                />
-                {index !== arr?.length - 1 && <ArrowIcon />}
-              </li>
-            );
-          })}
-      </ul>
+      <div className={styles.listItem}>
+        {steps[currentStep].list?.map((item, index) => (
+          <Fragment key={index}>
+            <Circle
+              letter={item._value}
+              //state={item?.color}
+              index={index}
+              state = {getLetterState(index, steps[currentStep], currentOperation)}
+              head={getLetterElementHead(index, steps[currentStep], currentOperation)}
+              /* head={index === 0 && !item.newItem ? "head" : ""} */
+              /*  tail={index === arr.length - 1 && !item.newItem ? "tail" : ""}  */
+            />
+            {steps[currentStep].list?.length - 1 !== index && <ArrowIcon />}
+          </Fragment>
+        ))}
+      </div>
     </SolutionLayout>
   );
 };

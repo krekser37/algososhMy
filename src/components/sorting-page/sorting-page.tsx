@@ -8,6 +8,7 @@ import { Column } from "../ui/column/column";
 import { RadioInput } from "../ui/radio-input/radio-input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./sorting.module.css";
+import { randomArr } from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [loader, setLoader] = useState(false);
@@ -16,25 +17,7 @@ export const SortingPage: React.FC = () => {
   const [sorting, setSorting] = useState<Direction>();
 
   const onClick = () => {
-    setLoader(true);
     setArr(randomArr());
-  };
-
-  const randomArr = (): TArraySort[] => {
-    let arr: TArraySort[] = [];
-    const minLen = 3;
-    const maxLen = 17;
-    let length = randomNumber(minLen, maxLen);
-
-    for (let i = 0; i < length; i++) {
-      arr.push({ state: randomNumber(0, 100), color: ElementStates.Default });
-    }
-    setLoader(false);
-    return arr;
-  };
-
-  const randomNumber = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
   const OnChange = (e: ChangeEvent<HTMLInputElement>) => {

@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/utils";
@@ -8,67 +8,62 @@ import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 
 import styles from "./stack.module.css";
+import { Stack } from "./stack";
 
-type TArrayStack = {
+/* type TArrayStack = {
   value: string;
   color: ElementStates;
-};
-
-export interface IStack<T> {
-  push: (item: T) => void;
-  pop: () => void;
-  peak: () => T | null;
-  clear: () => void;
-  getSize: () => number;
-  getElements: () => T[];
-}
-
-class Stack<T> implements IStack<T> {
-  private container: T[] = [];
-
-  push = (item: T) => {
-    this.container.push(item);
-  };
-
-  pop = (): void => {
-    this.container.pop();
-  };
-
-  peak = (): T | null => {
-    if (this.getSize() !== 0) {
-      return this.container[this.getSize() - 1];
-    } else {
-      return null;
-    }
-  };
-
-  clear = (): void => {
-    this.container = [];
-  };
-
-  getSize = () => this.container.length;
-
-  getElements = () => {
-    return this.container;
-  };
-}
+}; */
 
 export const StackPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [arr, setArr] = useState<TArrayStack[]>([]);
-  const [stack] = useState(new Stack<TArrayStack>());
-  const [disabled, setDisables] = useState(true);
+  const [arr, setArr] = useState<string[]>([]);
+  const stack = useRef<Stack<string>>(new Stack());
+  const [disabled, setDisables] = useState(false);
   const [loader, setLoader] = useState({
     add: false,
     delete: false,
     clear: false,
   });
+  const [actionElementIndex, setActionElementIndex] = useState(-1);
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const onClickPush = async () => {
+    setLoader({ ...loader, add: true });
+    setDisables(true);
+    stack.current.push(inputValue);
+    setArr(stack.current.item);
+    setInputValue("");
+    setActionElementIndex(stack.current.size - 1);
+    await delay(SHORT_DELAY_IN_MS);
+    setActionElementIndex(-1);
+    setLoader({ ...loader, add: false });
+    setDisables(false);
+  };
+
+  const onClickPop = async () => {
+  // setLoader({ ...loader, delete: true }); 
+   // setDisables(true);
+   console.log([...stack.current.item]);
+   
+    setActionElementIndex(stack.current.size);
+    setArr([...stack.current.item])
+    console.log(stack.current.size);
+    
+    await delay(SHORT_DELAY_IN_MS);
+    stack.current.pop();   
+  
+    setArr([...stack.current.item])
+    console.log([...stack.current.item]);
+    setActionElementIndex(-1);
+   // setLoader({ ...loader, delete: false });
+    //setDisables(false);
+  };
+
+  /*   const onClickPush = async () => {
     setLoader({ ...loader, add: true });
     setDisables(true);
     stack.push({ value: inputValue, color: ElementStates.Changing });
@@ -81,9 +76,9 @@ export const StackPage: React.FC = () => {
     setDisables(false);
     setArr([...stack.getElements()]);
     setLoader({ ...loader, add: false });
-  };
+  }; */
 
-  const onClickClear = async () => {
+  /*   const onClickClear = async () => {
     setLoader({ ...loader, clear: true });
     setDisables(true);
     await delay(SHORT_DELAY_IN_MS);
@@ -91,9 +86,9 @@ export const StackPage: React.FC = () => {
     setArr([]);
     setDisables(false);
     setLoader({ ...loader, clear: false });
-  };
+  }; */
 
-  const onClickPop = async () => {
+  /*  const onClickPop = async () => {
     setLoader({ ...loader, delete: true });
     setDisables(true);
     const stackPeak = stack.peak();
@@ -104,7 +99,7 @@ export const StackPage: React.FC = () => {
     setArr([...stack.getElements()]);
     setLoader({ ...loader, delete: false });
     setDisables(false);
-  };
+  }; */
 
   return (
     <SolutionLayout title="Стек">
@@ -130,22 +125,22 @@ export const StackPage: React.FC = () => {
         <Button
           text="Удалить"
           linkedList={"small"}
-          onClick={() => {
+            onClick={() => {
             onClickPop();
           }}
           isLoader={loader.delete}
-          disabled={disabled || !arr.length}
+          disabled={disabled || arr.length === 0}
           extraClass={styles.button}
         />
         <Button
           text="Очистить"
           linkedList={"small"}
-          onClick={() => {
+          /* onClick={() => {
             onClickClear();
-          }}
+          }} */
           type="reset"
           isLoader={loader.clear}
-          disabled={disabled || !arr.length}
+          disabled={disabled || arr.length === 0}
           extraClass={styles.button}
         />
       </section>
@@ -155,9 +150,13 @@ export const StackPage: React.FC = () => {
             return (
               <li className="" key={index}>
                 <Circle
-                  letter={item.value}
-                  state={item.color}
-                  head={stack.getSize() - 1 === index ? "top" : ""}
+                  letter={item}
+                  state={
+                    index === actionElementIndex
+                      ? ElementStates.Changing
+                      : ElementStates.Default
+                  }
+                  head={index === arr?.length - 1 ? "top" : undefined}
                   index={index}
                 />
               </li>
