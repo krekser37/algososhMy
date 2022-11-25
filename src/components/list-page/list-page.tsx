@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
-import {  Step } from "../../types/element-states";
+import { Step } from "../../types/element-states";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
@@ -55,7 +55,7 @@ export const ListPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [currentOperation, setCurrentOperation] =
     useState<OperationTypes | null>(null);
-
+  const [isActive, setIsActive] = useState(false);
   /*   const [loader, setLoader] = useState({
     loaderAddHead: false,
     loaderAddTail: false,
@@ -76,6 +76,7 @@ export const ListPage: React.FC = () => {
 
   useEffect(() => {
     if (!currentOperation) return;
+    setIsActive(true);
     let steps: Step<string>[] = [];
     console.log(steps);
 
@@ -88,12 +89,13 @@ export const ListPage: React.FC = () => {
       setCurrentStep(0);
       intervalId.current = setInterval(() => {
         console.log(currentStep, steps.length);
-        
+
         setCurrentStep((currentStep) => {
-          if (currentStep === steps.length-1 && intervalId.current) {
+          if (currentStep === steps.length - 1 && intervalId.current) {
             clearInterval(intervalId.current);
             setCurrentOperation(null);
-            setSteps([steps[steps.length-1]])
+            setIsActive(false);
+            setSteps([steps[steps.length - 1]]);
             setInputValue("");
             return 0;
           }
@@ -299,7 +301,7 @@ export const ListPage: React.FC = () => {
           extraClass={styles.input}
           onChange={onChangeValue}
           value={inputValue}
-          /* disabled={disabled} */
+          disabled={isActive}
         />
         <Button
           text="Добавить в head"
@@ -307,8 +309,8 @@ export const ListPage: React.FC = () => {
           onClick={() => {
             setCurrentOperation(OperationTypes.AddHead);
           }}
-          /*  isLoader={loader.loaderAddHead} */
-          disabled={!inputValue}
+          isLoader={isActive}
+          disabled={!inputValue || (currentOperation !== null && isActive)}
         />
         <Button
           text="Добавить в tail"
@@ -372,8 +374,16 @@ export const ListPage: React.FC = () => {
               letter={item._value}
               //state={item?.color}
               index={index}
-              state = {getLetterState(index, steps[currentStep], currentOperation)}
-              head={getLetterElementHead(index, steps[currentStep], currentOperation)}
+              state={getLetterState(
+                index,
+                steps[currentStep],
+                currentOperation
+              )}
+              head={getLetterElementHead(
+                index,
+                steps[currentStep],
+                currentOperation
+              )}
               /* head={index === 0 && !item.newItem ? "head" : ""} */
               /*  tail={index === arr.length - 1 && !item.newItem ? "tail" : ""}  */
             />
