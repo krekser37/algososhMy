@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
-import { delay } from "../../utils/utils";
+import { delay, randomNumber } from "../../utils/utils";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { ArrowIcon } from "../ui/icons/arrow-icon";
@@ -24,10 +24,6 @@ type TArrList = {
   location?: "top" | "bottom";
   isSmall?: boolean;
   newItem?: TNewItem | null;
-};
-
-const randomNumber = (min: number, max: number): number => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
