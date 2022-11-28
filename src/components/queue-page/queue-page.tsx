@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { delay } from "../../utils/utils";
@@ -6,124 +6,37 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-
+import { Queue } from "./queue";
 import styles from "./queue.module.css";
 
-type TArrayQueue = {
-  value?: string;
-  color: ElementStates;
-  head?: string;
-};
-
-const emptyQueue = Array.from({ length: 7 }, () => ({
-  value: "",
-  color: ElementStates.Default,
-}));
-
-interface IQueue<T> {
-  enqueue: (item: T) => void;
-  dequeue: () => void;
-  peak: () => T | null;
-  clear: () => void;
-  getTail: () => number;
-  getHead: () => number;
-  isFull: () => boolean;
-  getSize: () => number;
-  getElements: () => Array<T | null>;
-}
-class Queue<T> implements IQueue<T> {
-  private container: (T | null)[] = [];
-  private head = 0;
-  private tail = 0;
-  private readonly size: number = 0;
-  private length: number = 0;
-
-  constructor(size: number) {
-    this.size = size;
-    this.container = Array(size);
-  }
-
-  enqueue = (item: T) => {
-    if (this.length >= this.size) {
-      throw new Error("Maximum length exceeded");
-    }
-    this.container[this.tail % this.size] = item;
-    this.tail++;
-    this.length++;
-  };
-
-  dequeue = () => {
-    if (this.isEmpty()) {
-      throw new Error("No elements in the queue");
-    }
-    this.container[this.head % this.size] = null;
-    this.length--;
-
-    if (this.head !== this.size - 1 && this.head !== this.tail) {
-      this.head++;
-    }
-  };
-
-  peak = (): T | null => {
-    if (this.isEmpty()) {
-      throw new Error("No elements in the queue");
-    }
-    return this.container[this.head % this.size];
-  };
-
-  getTail = () => {
-    return this.tail;
-  };
-
-  getHead = () => {
-    return this.head;
-  };
-
-  getElements = (): (T | null)[] => {
-    return [...this.container];
-  };
-
-  isEmpty = () => this.length === 0;
-
-  isFull = () => this.length >= this.size;
-
-  getSize = () => this.container.length;
-
-  clear = () => {
-    this.head = 0;
-    this.tail = 0;
-    this.length = 0;
-    this.container = Array(this.size);
-  };
-}
-
+const queue_length = 7;
 export const QueuePage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [arr, setArr] = useState<(TArrayQueue | null)[]>([]);
+  const queue = useRef<Queue<string>>(new Queue(queue_length));
+  const [arr, setArr] = useState<(string | null)[]>(
+    new Array(queue_length).fill(null)
+  );
   const [disabled, setDisables] = useState(false);
-  const [queue, setQueue] = useState(new Queue<TArrayQueue>(7));
+  const [actionElementIndex, setActionElementIndex] = useState(-1);
   const [loader, setLoader] = useState({
     add: false,
     delete: false,
     clear: false,
   });
 
-  useEffect(() => {
-    setArr(emptyQueue);
-  }, []);
-
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value);
+    setInputValue(e.currentTarget.value);
     setDisables(true);
   };
 
   const onClickEnqueue = async () => {
     setLoader({ ...loader, add: true });
-    queue.enqueue({ value: inputValue, color: ElementStates.Changing });
-    setQueue(queue);
-    setArr([...queue.getElements()]);
+    setActionElementIndex(queue.current.getTail);
+    queue.current.enqueue(inputValue);
+    setArr(queue.current.toArray());
     await delay(SHORT_DELAY_IN_MS);
     setInputValue("");
+    setActionElementIndex(-1);
     setLoader({ ...loader, add: false });
     setDisables(false);
   };
@@ -131,16 +44,10 @@ export const QueuePage: React.FC = () => {
   const onClickDequeue = async () => {
     setLoader({ ...loader, delete: true });
     setDisables(true);
+    setActionElementIndex(queue.current.getHead);
     await delay(SHORT_DELAY_IN_MS);
-    queue.peak();
-    setQueue(queue);
-    const item = queue.peak();
-    if (item) item.color = ElementStates.Changing;
-    setArr([...queue.getElements()]);
-    await delay(SHORT_DELAY_IN_MS);
-    queue.dequeue();
-    if (item) item.color = ElementStates.Default;
-    setArr([...queue.getElements()]);
+    queue.current.dequeue();
+    setActionElementIndex(-1);
     setLoader({ ...loader, delete: false });
     setDisables(false);
   };
@@ -149,9 +56,8 @@ export const QueuePage: React.FC = () => {
     setLoader({ ...loader, clear: true });
     setDisables(true);
     await delay(SHORT_DELAY_IN_MS);
-    setArr(emptyQueue);
-    queue.clear();
-    setQueue(queue);
+    queue.current.clear();
+    setArr(new Array(queue_length).fill(null));
     setDisables(false);
     setLoader({ ...loader, clear: false });
   };
@@ -174,7 +80,7 @@ export const QueuePage: React.FC = () => {
             onClickEnqueue();
           }}
           isLoader={loader.add}
-          disabled={!inputValue || queue.isFull()}
+          disabled={!inputValue || queue.current.isFull()}
           extraClass={styles.button}
         />
         <Button
@@ -184,7 +90,7 @@ export const QueuePage: React.FC = () => {
             onClickDequeue();
           }}
           isLoader={loader.delete}
-          disabled={disabled || queue.isEmpty()}
+          disabled={disabled || queue.current.isEmpty()}
           extraClass={styles.button}
         />
         <Button
@@ -195,7 +101,7 @@ export const QueuePage: React.FC = () => {
           }}
           type="reset"
           isLoader={loader.clear}
-          disabled={disabled || queue.isEmpty()}
+          disabled={disabled || queue.current.getTail() ===0}
           extraClass={styles.button}
         />
       </section>
@@ -205,13 +111,21 @@ export const QueuePage: React.FC = () => {
             return (
               <li className="" key={index}>
                 <Circle
-                  letter={item?.value}
-                  state={item?.color}
+                  letter={item ? item : ""}
+                  state={
+                    index === actionElementIndex
+                      ? ElementStates.Changing
+                      : ElementStates.Default
+                  }
                   head={
-                    index === queue.getHead() && !queue.isEmpty() ? "head" : ""
+                    (index === queue.current.getHead() &&
+                    !queue.current.isEmpty()) || (index === queue.current.getHead() && queue.current.getHead() === queue.current.getSize()-1)
+                      ? "head"
+                      : ""
                   }
                   tail={
-                    index === queue.getTail() - 1 && !queue.isEmpty()
+                    index === queue.current.getTail() &&
+                    !queue.current.isEmpty()
                       ? "tail"
                       : ""
                   }
