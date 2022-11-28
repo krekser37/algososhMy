@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import { delay, randomNumber } from "../../utils/utils";
@@ -11,44 +11,63 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list.module.css";
 import { LinkedList } from "./utils";
 
-type TNewItem = {
+/* type TNewItem = {
   value?: string;
   color?: ElementStates;
   location?: "top" | "bottom";
   isSmall?: boolean;
-};
+}; */
 
-type TArrList = {
+/* type TArrList = {
   value: string;
   color: ElementStates;
   location?: "top" | "bottom";
   isSmall?: boolean;
   newItem?: TNewItem | null;
+}; */
+export enum Location {
+  top = "top",
+  bottom = "bottom",
+}
+
+type TElementStates = {
+  modifiedIndex: number;
+  changingIndex: number;
 };
 
 const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
   String(randomNumber(0, 99))
 );
 
-const arrList: TArrList[] = randomArr.map((item) => ({
+/* const arrList: TArrList[] = randomArr.map((item) => ({
   value: item,
   color: ElementStates.Default,
-}));
+})); */
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [inputIndex, setInputIndex] = useState<string>("");
-  const [arr, setArr] = useState<TArrList[]>(arrList);
-  const list = new LinkedList(randomArr);
-  const [loader,setLoader]=useState({
-    loaderAddHead:false,
-    loaderAddTail:false,
-    loaderDeleteHead:false,
-    loaderDeleteTail:false,
-    loaderAddIndex:false,
-    loaderDeleteIndex:false,
-  })
-  const [disabled, setDisabled]=useState(false)
+  const list = useRef(new LinkedList(randomArr));
+  const [arr, setArr] = useState<string[]>(list.current.toArray());
+  const [smallCircleIndex, setSmallCircleIndex] = useState(-1);
+  const [smallCircleLocation, setSmallCircleLocation] = useState<
+    Location | undefined
+  >(undefined);
+  const [typeElementStates, setTypeElementStates] = useState<TElementStates>({
+    modifiedIndex: -1,
+    changingIndex: -1,
+  });
+
+  const [currentElement, setCurrentElement] = useState("");
+  const [loader, setLoader] = useState({
+    loaderAddHead: false,
+    loaderAddTail: false,
+    loaderDeleteHead: false,
+    loaderDeleteTail: false,
+    loaderAddIndex: false,
+    loaderDeleteIndex: false,
+  });
+  const [disabled, setDisabled] = useState(false);
 
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -58,72 +77,43 @@ export const ListPage: React.FC = () => {
     setInputIndex(e.target.value);
   };
 
-  const onClickAddTail = async () => {
+    const onClickAddTail = async () => {
     setLoader({ ...loader, loaderAddTail: true })
     setDisabled(true);
-    list.append(inputValue);
-    arr[arr.length - 1] = {
-      ...arr[arr.length - 1],
-      newItem: {
-        value: inputValue,
-        color: ElementStates.Changing,
-        location: "top",
-        isSmall: true,
-      },
-    };
-    setArr([...arr]);
+    setCurrentElement(inputValue);
+    setSmallCircleLocation(Location.top);
+    console.log(list.current.getSize);
+    setSmallCircleIndex(list.current.getSize);
     await delay(SHORT_DELAY_IN_MS);
-    arr[arr.length - 1] = {
-      ...arr[arr.length - 1],
-      newItem: null,
-    };
-    arr.push({
-      value: inputValue,
-      color: ElementStates.Modified,
-    });
-    setArr([...arr]);
+    list.current.append(inputValue);
+    setSmallCircleIndex(-1);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: 0 });
+    setArr(list.current.toArray());
     await delay(SHORT_DELAY_IN_MS);
-    arr[arr.length - 1].color = ElementStates.Default;
-    setArr([...arr]);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: -1 });
     setInputValue("");
     setLoader({ ...loader, loaderAddTail: false })
     setDisabled(false);
   };
 
   const onClickAddHead = async () => {
-    setLoader({ ...loader, loaderAddHead: true })
-    list.prepend(inputValue);
-    arr[0] = {
-      ...arr[0],
-      newItem: {
-        value: inputValue,
-        color: ElementStates.Changing,
-        location: "top",
-        isSmall: true,
-      },
-    };
-    setArr([...arr]);
-
+    setLoader({ ...loader, loaderAddHead: true });
+    setCurrentElement(inputValue);
+    setSmallCircleLocation(Location.top);
+    setSmallCircleIndex(0);
     await delay(SHORT_DELAY_IN_MS);
-    arr[0] = {
-      ...arr[0],
-      newItem: null,
-    };
-    list.deleteTail();
-    arr.unshift({
-      value: inputValue,
-      color: ElementStates.Modified,
-    });
-    setArr([...arr]);
+    setSmallCircleIndex(-1);
+    list.current.prepend(inputValue);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: 0 });
+    setArr(list.current.toArray());
     await delay(SHORT_DELAY_IN_MS);
-    arr[0].color = ElementStates.Default;
-    setArr([...arr]);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: -1 });
     setInputValue("");
-    setLoader({ ...loader, loaderAddHead: false })
+    setLoader({ ...loader, loaderAddHead: false });
     setDisabled(false);
   };
 
-  const onClickDeleteHead = async () => {
+  /*   const onClickDeleteHead = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteHead: true })
     list.deleteHead();
@@ -143,9 +133,9 @@ export const ListPage: React.FC = () => {
     setArr([...arr]);
     setLoader({ ...loader, loaderDeleteHead: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickDeleteTail = async () => {
+  /*  const onClickDeleteTail = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteTail: true })
     list.deleteTail();
@@ -165,9 +155,9 @@ export const ListPage: React.FC = () => {
     setArr([...arr]);
     setLoader({ ...loader, loaderDeleteTail: false })
     setDisabled(false);
-  };
+  }; */
 
-  const onClickAddIndex = async () => {
+  /*   const onClickAddIndex = async () => {
     setLoader({ ...loader, loaderAddIndex: true })
     if (inputIndex) {
       let index = Number(inputIndex);
@@ -207,8 +197,9 @@ export const ListPage: React.FC = () => {
       setLoader({ ...loader, loaderAddIndex: false })
       setDisabled(false);
     }
-  };
-  const onClickDeleteIndex = async () => {
+  }; */
+
+  /*  const onClickDeleteIndex = async () => {
     setLoader({ ...loader, loaderDeleteIndex: true })
     let index = Number(inputIndex);
     list.deleteByIndex(index);
@@ -239,6 +230,37 @@ export const ListPage: React.FC = () => {
     setInputIndex("");
     setLoader({ ...loader, loaderDeleteIndex: false })
     setDisabled(false);
+  }; */
+
+  const showHead = (index: number) => {
+    return smallCircleIndex === index &&
+      smallCircleLocation === Location.top ? (
+      <Circle letter={currentElement} state={ElementStates.Changing} isSmall />
+    ) : index === 0 ? (
+      "head"
+    ) : undefined;
+  };
+
+  const showTail = (index: number) => {
+    return smallCircleIndex === index &&
+      smallCircleLocation === Location.bottom ? (
+      <Circle letter={currentElement} state={ElementStates.Changing} isSmall />
+    ) : index === arr.length - 1 ? (
+      "tail"
+    ) : undefined;
+  };
+
+  const getLetterState = (
+    index: number,
+    typeElementStates: TElementStates
+  ): ElementStates => {
+    if (typeElementStates.modifiedIndex === index) {
+      return ElementStates.Modified;
+    }
+    if (typeElementStates.changingIndex >= index) {
+      return ElementStates.Changing;
+    }
+    return ElementStates.Default;
   };
 
   return (
@@ -266,7 +288,7 @@ export const ListPage: React.FC = () => {
         <Button
           text="Добавить в tail"
           linkedList="big"
-          onClick={() => {
+           onClick={() => {
             onClickAddTail();
           }}
           isLoader={loader.loaderAddTail}
@@ -275,18 +297,18 @@ export const ListPage: React.FC = () => {
         <Button
           text="Удалить из head"
           linkedList="big"
-          onClick={() => {
+          /*  onClick={() => {
             onClickDeleteHead();
-          }}
+          }} */
           isLoader={loader.loaderDeleteHead}
           disabled={arr.length === 0}
         />
         <Button
           text="Удалить из tail"
           linkedList="big"
-          onClick={() => {
+          /*  onClick={() => {
             onClickDeleteTail();
-          }}
+          }} */
           isLoader={loader.loaderDeleteTail}
           disabled={arr.length === 0}
         />
@@ -302,41 +324,48 @@ export const ListPage: React.FC = () => {
         <Button
           text="Добавить по индексу"
           linkedList="big"
-          onClick={() => {
+          /* onClick={() => {
             onClickAddIndex();
-          }}
+          }} */
           isLoader={loader.loaderAddIndex}
           disabled={!inputIndex || !inputValue}
         />
         <Button
           text="Удалить по индексу"
           linkedList="big"
-          onClick={() => {
+          /*  onClick={() => {
             onClickDeleteIndex();
-          }}
+          }} */
           isLoader={loader.loaderDeleteIndex}
-          disabled={!inputIndex }
+          disabled={!inputIndex}
         />
       </section>
       <ul className="list">
         {arr &&
           arr?.map((item, index) => {
+            /*      const currentState =
+              modifiedIndex === index
+                ? ElementStates.Modified
+                : changingIndex >= index
+                ? ElementStates.Changing
+                : ElementStates.Default; */
+
             return (
               <li key={index} className={styles.listItem}>
-                {item.newItem && (
+                {/*   {item.newItem && (
                   <Circle
                     letter={item.newItem.value}
                     state={item.newItem.color}
                     isSmall={item.newItem.isSmall}
                     extraClass={`${styles[`${item.newItem.location}`]}`}
                   />
-                )}
+                )} */}
                 <Circle
-                  letter={item?.value}
-                  state={item?.color}
+                  letter={item}
+                  head={showHead(index)}
+                  tail={showTail(index)}
+                  state={getLetterState(index, typeElementStates)}
                   index={index}
-                  head={index === 0 && !item.newItem ? "head" : ""}
-                  tail={index === arr.length - 1 && !item.newItem ? "tail" : ""}
                 />
                 {index !== arr?.length - 1 && <ArrowIcon />}
               </li>

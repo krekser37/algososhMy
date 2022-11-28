@@ -15,10 +15,11 @@ interface ILinkedList<T> {
     deleteTail: () => void;
     addByIndex: (element: T, index: number | undefined) => void;
     deleteByIndex: (index: number) => void;
+    getSize: () => number;
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
-    private container: (T | null)[] = [];
+   // private container: (T | null)[] = [];
     private head: Node<T> | null;
     private tail: Node<T> | null;
     length: number;
@@ -27,9 +28,13 @@ export class LinkedList<T> implements ILinkedList<T> {
         this.head = null;
         this.tail = null;
         this.length = 0;
-        randomArr?.forEach((item) => {
-            this.append(item)
-        })
+        if (randomArr && randomArr.length > 0) {
+            randomArr?.forEach((item) => {
+                this.append(item)
+            })
+        }
+
+
     }
 
     /* Добавить в конец */
@@ -51,14 +56,12 @@ export class LinkedList<T> implements ILinkedList<T> {
         const node = new Node(value);
         if (!this.head || !this.tail) {
             this.head = node;
-            //this.head.next = null;
+            this.head.next = null;
             this.tail = node;
-            return this;
         }
-        this.head.next = node;
+        node.next = this.head;
         this.head = node;
-      /*   this.length++; */
-        return this;
+        //  this.length++;
     }
 
     deleteHead = () => {
@@ -151,7 +154,7 @@ export class LinkedList<T> implements ILinkedList<T> {
     }
 
 
-    /* toArray() {
+    toArray() {
         let curr = this.head;
         let res: T[] = [];
         while (curr) {
@@ -159,6 +162,7 @@ export class LinkedList<T> implements ILinkedList<T> {
             curr = curr.next;
         }
         return res;
-    } */
+    }
 
+    getSize = () => this.length;
 }
