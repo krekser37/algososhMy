@@ -7,7 +7,6 @@ export class Node<T> {
     }
 }
 
-
 interface ILinkedList<T> {
     append: (element: T) => void; /* Добавить в конец */
     prepend: (element: T) => void; /* Добавить в начало */
@@ -19,7 +18,7 @@ interface ILinkedList<T> {
 }
 
 export class LinkedList<T> implements ILinkedList<T> {
-   // private container: (T | null)[] = [];
+    // private container: (T | null)[] = [];
     private head: Node<T> | null;
     private tail: Node<T> | null;
     length: number;
@@ -33,8 +32,6 @@ export class LinkedList<T> implements ILinkedList<T> {
                 this.append(item)
             })
         }
-
-
     }
 
     /* Добавить в конец */
@@ -104,53 +101,51 @@ export class LinkedList<T> implements ILinkedList<T> {
 
     addByIndex = (element: T, index: number | undefined) => {
         if (index) {
-            if (index < 0 || index > this.length) {
-                console.log('Enter a valid index');
-                return;
+            /*   if (index < 0 || index > this.length) {
+                   console.log('Enter a valid index');
+                   return;
+               } else {*/
+            const addNode = new Node(element);
+            if (index !== 0) {
+                addNode.next = this.head;
+                this.head = addNode;
+                this.length++;
             } else {
-                const addNode = new Node(element);
-                if (index === 0) {
-                    addNode.next = this.head;
-                    this.head = addNode;
-                } else {
-                    let curr = this.head;
-                    let currIndex = 0;
-                    // перебрать элементы в списке до нужной позиции
-                    while (currIndex < index) {
-                        currIndex++;
-                        if (curr?.next && currIndex !== index) {
-                            curr = curr?.next;
-                        }
+                console.log(index);
+
+                let curr = this.head;
+                let currIndex = 0;
+                // перебрать элементы в списке до нужной позиции
+                while (currIndex < index) {
+                    currIndex++;
+                    if (curr?.next && currIndex !== index) {
+                        curr = curr?.next;
                     }
-                    if (curr) {
-                        addNode.next = curr.next;
-                        curr.next = addNode;
-                    }
-                    this.length++;
                 }
+                if (curr) {
+                    addNode.next = curr.next;
+                    curr.next = addNode;
+                }
+
             }
+
         }
 
     }
     deleteByIndex = (index: number) => {
-        if (index >= 0 && index < this.length && this.head) {
-            let curr = this.head;
-            let previous = curr;
-            let currIndex = 0;
-            if (index === 0) {
-                this.head = curr.next;
+        let curr = this.head;
+        let previous = curr;
+        if (previous && curr) {
+            if (curr === this.head) {
+                this.head = this.head.next;
+            } else if (curr === this.tail) {
+                previous.next = null;
+                this.tail = previous;
             } else {
-                while (currIndex < index) {
-                    currIndex++
-                    if (curr.next) {
-                        previous = curr;
-                        curr = curr.next;
-                    }
-                }
                 previous.next = curr.next;
             }
-            this.length--;
         }
+        this.length--;
     }
 
 

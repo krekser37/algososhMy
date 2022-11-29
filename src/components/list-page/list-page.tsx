@@ -11,20 +11,6 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import styles from "./list.module.css";
 import { LinkedList } from "./utils";
 
-/* type TNewItem = {
-  value?: string;
-  color?: ElementStates;
-  location?: "top" | "bottom";
-  isSmall?: boolean;
-}; */
-
-/* type TArrList = {
-  value: string;
-  color: ElementStates;
-  location?: "top" | "bottom";
-  isSmall?: boolean;
-  newItem?: TNewItem | null;
-}; */
 export enum Location {
   top = "top",
   bottom = "bottom",
@@ -38,11 +24,6 @@ type TElementStates = {
 const randomArr = Array.from({ length: randomNumber(3, 6) }, () =>
   String(randomNumber(0, 99))
 );
-
-/* const arrList: TArrList[] = randomArr.map((item) => ({
-  value: item,
-  color: ElementStates.Default,
-})); */
 
 export const ListPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -77,25 +58,6 @@ export const ListPage: React.FC = () => {
     setInputIndex(e.target.value);
   };
 
-    const onClickAddTail = async () => {
-    setLoader({ ...loader, loaderAddTail: true })
-    setDisabled(true);
-    setCurrentElement(inputValue);
-    setSmallCircleLocation(Location.top);
-    console.log(list.current.getSize);
-    setSmallCircleIndex(list.current.getSize);
-    await delay(SHORT_DELAY_IN_MS);
-    list.current.append(inputValue);
-    setSmallCircleIndex(-1);
-    setTypeElementStates({ ...typeElementStates, modifiedIndex: 0 });
-    setArr(list.current.toArray());
-    await delay(SHORT_DELAY_IN_MS);
-    setTypeElementStates({ ...typeElementStates, modifiedIndex: -1 });
-    setInputValue("");
-    setLoader({ ...loader, loaderAddTail: false })
-    setDisabled(false);
-  };
-
   const onClickAddHead = async () => {
     setLoader({ ...loader, loaderAddHead: true });
     setCurrentElement(inputValue);
@@ -113,124 +75,110 @@ export const ListPage: React.FC = () => {
     setDisabled(false);
   };
 
-  /*   const onClickDeleteHead = async () => {
+  const onClickAddTail = async () => {
+    setLoader({ ...loader, loaderAddTail: true });
     setDisabled(true);
-    setLoader({ ...loader, loaderDeleteHead: true })
-    list.deleteHead();
-    arr[0] = {
-      ...arr[0],
-      value: "",
-      newItem: {
-        value: arr[0].value,
-        color: ElementStates.Changing,
-        location: "bottom",
-        isSmall: true,
-      },
-    };
-    setArr([...arr]);
+    setCurrentElement(inputValue);
+    setSmallCircleLocation(Location.top);
+    setSmallCircleIndex(list.current.getSize);
     await delay(SHORT_DELAY_IN_MS);
-    arr.shift();
-    setArr([...arr]);
-    setLoader({ ...loader, loaderDeleteHead: false })
+    list.current.append(inputValue);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: arr.length });
+    setSmallCircleIndex(-1);
+    setArr(list.current.toArray());
+    await delay(SHORT_DELAY_IN_MS);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: -1 });
+    setInputValue("");
+    setLoader({ ...loader, loaderAddTail: false });
     setDisabled(false);
-  }; */
+  };
 
-  /*  const onClickDeleteTail = async () => {
+  const onClickDeleteHead = async () => {
     setDisabled(true);
-    setLoader({ ...loader, loaderDeleteTail: true })
-    list.deleteTail();
-    arr[arr.length - 1] = {
-      ...arr[arr.length - 1],
-      value: "",
-      newItem: {
-        value: arr[arr.length - 1].value,
-        color: ElementStates.Changing,
-        location: "bottom",
-        isSmall: true,
-      },
-    };
-    setArr([...arr]);
+    setLoader({ ...loader, loaderDeleteHead: true });
+    setCurrentElement(arr[0]);
+    setSmallCircleLocation(Location.bottom);
+    setSmallCircleIndex(0);
+    arr.splice(0, 1, "");
     await delay(SHORT_DELAY_IN_MS);
-    arr.pop();
-    setArr([...arr]);
-    setLoader({ ...loader, loaderDeleteTail: false })
+    list.current.deleteHead();
+    setSmallCircleIndex(-1);
+    setArr(list.current.toArray());
+    setLoader({ ...loader, loaderDeleteHead: false });
     setDisabled(false);
-  }; */
+  };
 
-  /*   const onClickAddIndex = async () => {
-    setLoader({ ...loader, loaderAddIndex: true })
-    if (inputIndex) {
-      let index = Number(inputIndex);
-      list.addByIndex(inputValue, index);
-      for (let i = 0; i <= index; i++) {
-        arr[i] = {
-          ...arr[i],
-          color: ElementStates.Changing,
-          newItem: {
-            value: inputValue,
-            color: ElementStates.Changing,
-            location: "top",
-            isSmall: true,
-          },
-        };
+  const onClickDeleteTail = async () => {
+    setDisabled(true);
+    setLoader({ ...loader, loaderDeleteTail: true });
+    setCurrentElement(arr[arr.length - 1]);
+    setSmallCircleLocation(Location.bottom);
+    setSmallCircleIndex(arr.length);
+    setArr((arr) => [...arr.slice(0, arr.length - 1), ""]);
+    await delay(SHORT_DELAY_IN_MS);
+    list.current.deleteTail();
+    setSmallCircleIndex(-1);
+    setArr(list.current.toArray());
+    setLoader({ ...loader, loaderDeleteTail: false });
+    setDisabled(false);
+  };
 
-        setArr([...arr]);
-        await delay(SHORT_DELAY_IN_MS);
-        arr[i] = {
-          ...arr[i],
-          newItem: null,
-        };
-        setArr([...arr]);
-      }
-      arr.forEach((item) => (item.color = ElementStates.Default));
-      arr.splice(index, 0, {
-        value: inputValue,
-        color: ElementStates.Modified,
-        newItem: null,
-      });
-      setArr([...arr]);
-      await delay(SHORT_DELAY_IN_MS);
-      arr.forEach((item) => (item.color = ElementStates.Default));
-      setArr([...arr]);
-      setInputValue("");
-      setInputIndex("");
-      setLoader({ ...loader, loaderAddIndex: false })
-      setDisabled(false);
-    }
-  }; */
-
-  /*  const onClickDeleteIndex = async () => {
-    setLoader({ ...loader, loaderDeleteIndex: true })
+  const onClickAddIndex = async () => {
+    setLoader({ ...loader, loaderAddIndex: true });
+    let currentElementIndex = -1;
     let index = Number(inputIndex);
-    list.deleteByIndex(index);
-    for (let i = 0; i <= index; i++) {
-      arr[i] = {
-        ...arr[i],
-        color: ElementStates.Changing,
-      };
+    while (currentElementIndex <= index) {
+      setCurrentElement(inputValue);
+      setSmallCircleLocation(Location.top);
+      setSmallCircleIndex(currentElementIndex - 1);
+      setTypeElementStates({
+        ...typeElementStates,
+        changingIndex: currentElementIndex - 1,
+      });
+      setCurrentElement(inputValue);
+      setSmallCircleLocation(Location.top);
+      setSmallCircleIndex(currentElementIndex);
       await delay(SHORT_DELAY_IN_MS);
-      setArr([...arr]);
+      currentElementIndex++;
     }
-    arr[index] = {
-      ...arr[index],
-      value: "",
-      color: ElementStates.Default,
-      newItem: {
-        value: arr[index].value,
-        color: ElementStates.Changing,
-        location: "bottom",
-        isSmall: true,
-      },
-    };
-    setArr([...arr]);
+    list.current.addByIndex(inputValue, index);
+    setSmallCircleIndex(-1);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: index });
+    setArr(list.current.toArray());
     await delay(SHORT_DELAY_IN_MS);
-    arr.splice(index, 1);
-    arr.forEach((item) => (item.color = ElementStates.Default));
-    setArr([...arr]);
+    setTypeElementStates({ ...typeElementStates, modifiedIndex: -1 });
+    setArr(list.current.toArray());
+    setInputValue("");
     setInputIndex("");
-    setLoader({ ...loader, loaderDeleteIndex: false })
+    setLoader({ ...loader, loaderAddIndex: false });
     setDisabled(false);
-  }; */
+  };
+
+  const onClickDeleteIndex = async () => {
+    setLoader({ ...loader, loaderDeleteIndex: true });
+    let index = Number(inputIndex);
+    let currentElementIndex = 0;
+    while (currentElementIndex <= index) {
+      setTypeElementStates({
+        ...typeElementStates,
+        changingIndex: currentElementIndex,
+      });
+      await delay(SHORT_DELAY_IN_MS);
+      currentElementIndex++;
+    }
+    setCurrentElement(arr[index]);
+    setSmallCircleLocation(Location.bottom);
+    setSmallCircleIndex(index);
+    setArr((arr) => [...arr.slice(0, index), "", ...arr.slice(index + 1)]);
+    await delay(SHORT_DELAY_IN_MS);
+    setTypeElementStates({ ...typeElementStates, changingIndex: -1 });
+    setSmallCircleIndex(-1);
+    list.current.deleteByIndex(index);
+    setArr(list.current.toArray());
+    setInputIndex("");
+    setLoader({ ...loader, loaderDeleteIndex: false });
+    setDisabled(false);
+  };
 
   const showHead = (index: number) => {
     return smallCircleIndex === index &&
@@ -288,7 +236,7 @@ export const ListPage: React.FC = () => {
         <Button
           text="Добавить в tail"
           linkedList="big"
-           onClick={() => {
+          onClick={() => {
             onClickAddTail();
           }}
           isLoader={loader.loaderAddTail}
@@ -297,18 +245,18 @@ export const ListPage: React.FC = () => {
         <Button
           text="Удалить из head"
           linkedList="big"
-          /*  onClick={() => {
+          onClick={() => {
             onClickDeleteHead();
-          }} */
+          }}
           isLoader={loader.loaderDeleteHead}
           disabled={arr.length === 0}
         />
         <Button
           text="Удалить из tail"
           linkedList="big"
-          /*  onClick={() => {
+          onClick={() => {
             onClickDeleteTail();
-          }} */
+          }}
           isLoader={loader.loaderDeleteTail}
           disabled={arr.length === 0}
         />
@@ -320,22 +268,25 @@ export const ListPage: React.FC = () => {
           onChange={onChangeIndex}
           value={inputIndex}
           disabled={disabled}
+          type="number"
+          min="0"
+          max={arr.length - 1}
         />
         <Button
           text="Добавить по индексу"
           linkedList="big"
-          /* onClick={() => {
+          onClick={() => {
             onClickAddIndex();
-          }} */
+          }}
           isLoader={loader.loaderAddIndex}
           disabled={!inputIndex || !inputValue}
         />
         <Button
           text="Удалить по индексу"
           linkedList="big"
-          /*  onClick={() => {
+          onClick={() => {
             onClickDeleteIndex();
-          }} */
+          }}
           isLoader={loader.loaderDeleteIndex}
           disabled={!inputIndex}
         />
@@ -343,23 +294,8 @@ export const ListPage: React.FC = () => {
       <ul className="list">
         {arr &&
           arr?.map((item, index) => {
-            /*      const currentState =
-              modifiedIndex === index
-                ? ElementStates.Modified
-                : changingIndex >= index
-                ? ElementStates.Changing
-                : ElementStates.Default; */
-
             return (
               <li key={index} className={styles.listItem}>
-                {/*   {item.newItem && (
-                  <Circle
-                    letter={item.newItem.value}
-                    state={item.newItem.color}
-                    isSmall={item.newItem.isSmall}
-                    extraClass={`${styles[`${item.newItem.location}`]}`}
-                  />
-                )} */}
                 <Circle
                   letter={item}
                   head={showHead(index)}
