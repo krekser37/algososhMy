@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`test Button component render button with text 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Click me!
+  </p>
+</button>
+`;
+
+exports[`test Button component render button with text 2`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Click me!
+  </p>
+</button>
+`;
+
+exports[`test Button component render disabled with 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  disabled={true}
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Click me!
+  </p>
+</button>
+`;
+
+exports[`test Button component render disabled with text 1`] = `
+<button
+  className="text text_type_button text_color_primary button undefined false "
+  type="button"
+>
+  <p
+    className="text undefined"
+  >
+    Click me!
+  </p>
+</button>
+`;
