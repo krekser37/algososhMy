@@ -2,23 +2,27 @@ import { reverseString } from "../utils";
 
 const evenString = "1234";
 const oddString = "12345";
+const single = "1";
+const emptyString = "";
+
 const evenArrayResult = [
   ["1", "2", "3", "4"],
   ["4", "2", "3", "1"],
   ["4", "3", "2", "1"],
 ];
-
 const oddArrayResult = [
   ["1", "2", "3", "4", "5"],
   ["5", "2", "3", "4", "1"],
   ["5", "4", "3", "2", "1"],
 ];
-
-const single = "1";
-
 const singleArrayResult = [["1"]];
+const emptyResult=[[]]; 
 
-const emptyString = "";
+/*// 2вариант
+const evenArrayResult = ["4", "3", "2", "1"]; 
+const oddArrayResult = ["5", "4", "3", "2", "1"];
+const singleArrayResult = ["1"];
+const emptyResult=[]; */
 
 describe("test component String:reverse", () => {
   it("Корректно разворачивает строку с чётным количеством символов", () => {
@@ -33,6 +37,6 @@ describe("test component String:reverse", () => {
     expect(reverseString(single)).toEqual(singleArrayResult);
   });
   it("Корректно разворачивает пустую строку", () => {
-    expect(reverseString(emptyString)).toEqual([[]]);
+    expect(reverseString(emptyString)).toEqual(emptyResult);
   });
 });
