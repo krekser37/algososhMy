@@ -4,42 +4,40 @@ import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Circle } from "../ui/circle/circle";
 import "./string.css";
-import { ElementStates } from "../../types/element-states";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { delay, swap, TArray } from "../../utils/utils";
+import { delay, swap } from "../../utils/utils";
+import { getState } from "./utils";
 
 export const StringComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
-  const [reverseInputValue, setReverseInputValue] = useState<Array<TArray>>([]);
+  const [reverseInputValue, setReverseInputValue] = useState<string[]>([]);
   const [loader, setLoader] = useState(false);
-
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
   const onChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
   const onClick = () => {
-    const array = inputValue
-      .split("")
-      .map((value) => ({ value, color: ElementStates.Default }));
-    reverse(array);
+    setCurrentIndex(0);
+    setLoader(true);
+    reverseString(inputValue);
+    setInputValue("");
   };
 
-  const reverse = async (array: TArray[]) => {
-    setLoader(true);
-    const mid = Math.ceil(array.length / 2);
+ const reverseString = async (string: string) => {
+    const mid = Math.ceil(string.length / 2);
+    const array = inputValue.split("");
     for (let i = 0; i < mid; i++) {
-      let j = array.length - 1 - i;
-      if (array.length === 1) {
-        array[i].color = ElementStates.Modified;
-      } else if (i < j) {
-        array[i].color = ElementStates.Changing;
-        array[j].color = ElementStates.Changing;
+      let j = string.length - 1 - i;
+      if (string.length === 1) {
         setReverseInputValue([...array]);
-        swap(array, i, j);
+      } else if (i < j) {
+        setReverseInputValue([...array]);
         await delay(DELAY_IN_MS);
-      } 
-      array[i].color = ElementStates.Modified;
-      array[j].color = ElementStates.Modified;
+        setCurrentIndex(i + 1);
+        swap(array, i, j);
+        setReverseInputValue([...array]);
+      }
       setReverseInputValue([...array]);
     }
     setLoader(false);
@@ -48,7 +46,13 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка">
       <section className="section">
-        <Input maxLength={11} value={inputValue} onChange={onChangeValue} type="text" isLimitText ={true}/>
+        <Input
+          maxLength={11}
+          value={inputValue}
+          onChange={onChangeValue}
+          type="text"
+          isLimitText={true}
+        />
         <Button
           text="Развернуть"
           linkedList={"small"}
@@ -62,7 +66,14 @@ export const StringComponent: React.FC = () => {
           reverseInputValue?.map((item, index) => {
             return (
               <li className="" key={index}>
-                <Circle letter={item.value} state={item.color} />
+                <Circle
+                  letter={item}
+                  state={getState(
+                    index,
+                    currentIndex,
+                    reverseInputValue.length
+                  )}
+                />
               </li>
             );
           })}
