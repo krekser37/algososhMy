@@ -43,20 +43,21 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <section className="sectionfib">
-        <Input maxLength={19} value={inputValue} onChange={onChangeValue} isLimitText ={true} max={19} type="number"/>
+        <Input maxLength={19} value={inputValue} onChange={onChangeValue} isLimitText ={true} max={19} type="number"data-cy="input"/>
         <Button
           text="Рассчитать"
           linkedList={"small"}
           onClick={onClick}
           isLoader={loader}
           disabled={!inputValue}
+          data-cy="submit"
         />
       </section>
       <ul className="listfib">
         {arr &&
           arr?.map((item, index) => {
             return (
-              <li className="" key={index}>
+              <li className="" key={index} data-cy="circle">
                 <Circle letter={String(item)} index={index} />
               </li>
             );
