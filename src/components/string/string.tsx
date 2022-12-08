@@ -52,6 +52,7 @@ export const StringComponent: React.FC = () => {
           onChange={onChangeValue}
           type="text"
           isLimitText={true}
+          data-cy="input"
         />
         <Button
           text="Развернуть"
@@ -59,6 +60,7 @@ export const StringComponent: React.FC = () => {
           onClick={onClick}
           isLoader={loader}
           disabled={!inputValue}
+          data-cy="submit"
         />
       </section>
       <ul className="list">
