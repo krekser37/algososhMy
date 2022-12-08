@@ -71,6 +71,7 @@ export const StackPage: React.FC = () => {
           type="text"
           isLimitText={true}
           extraClass={styles.input}
+          data-cy="input"
         />
         <Button
           text="Добавить"
@@ -81,6 +82,7 @@ export const StackPage: React.FC = () => {
           isLoader={loader.add}
           disabled={!inputValue}
           extraClass={styles.button}
+          data-cy="submitadd"
         />
         <Button
           text="Удалить"
@@ -91,6 +93,7 @@ export const StackPage: React.FC = () => {
           isLoader={loader.delete}
           disabled={disabled || arr.length === 0}
           extraClass={styles.button}
+          data-cy="submitdelete"
         />
         <Button
           text="Очистить"
@@ -102,6 +105,7 @@ export const StackPage: React.FC = () => {
           isLoader={loader.clear}
           disabled={disabled || arr.length === 0}
           extraClass={styles.button}
+          data-cy="submitclear"
         />
       </section>
       <ul className="list">
