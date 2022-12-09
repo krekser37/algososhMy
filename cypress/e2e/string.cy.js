@@ -1,35 +1,34 @@
 import { DELAY_IN_MS } from "../../src/constants/delays";
 
-const str = [1, 2, 3, 4, 5, 6];
-const secondstr = [6, 2, 3, 4, 5, 1];
-const thirdstr = [6, 5, 3, 4, 2, 1];
-const endstr = [6, 5, 4, 3, 2, 1];
-const firstState = [
-  "4px solid rgb(210, 82, 225)",
-  "4px solid rgb(0, 50, 255)",
-  "4px solid rgb(0, 50, 255)",
-  "4px solid rgb(0, 50, 255)",
-  "4px solid rgb(0, 50, 255)",
-  "4px solid rgb(210, 82, 225)",
+const str = [
+  [1, 2, 3, 4, 5, 6],
+  [6, 2, 3, 4, 5, 1],
+  [6, 5, 3, 4, 2, 1],
+  [6, 5, 4, 3, 2, 1],
 ];
 
-const secondState = [
+const state = [[
+  "4px solid rgb(210, 82, 225)",
+  "4px solid rgb(0, 50, 255)",
+  "4px solid rgb(0, 50, 255)",
+  "4px solid rgb(0, 50, 255)",
+  "4px solid rgb(0, 50, 255)",
+  "4px solid rgb(210, 82, 225)",
+], [
   "4px solid rgb(127, 224, 81)",
   "4px solid rgb(210, 82, 225)",
   "4px solid rgb(0, 50, 255)",
   "4px solid rgb(0, 50, 255)",
   "4px solid rgb(210, 82, 225)",
   "4px solid rgb(127, 224, 81)",
-];
-
-const thirdState = [
+], [
   "4px solid rgb(127, 224, 81)",
   "4px solid rgb(127, 224, 81)",
   "4px solid rgb(210, 82, 225)",
   "4px solid rgb(210, 82, 225)",
   "4px solid rgb(127, 224, 81)",
   "4px solid rgb(127, 224, 81)",
-];
+]];
 
 describe("component string", () => {
   beforeEach(() => {
@@ -51,22 +50,22 @@ describe("component string", () => {
     cy.get("@input").type("123456").should("have.value", "123456");
     cy.get("@button").should("be.visible").click();
     cy.get('div[class*="circle_circle"]').each(($el, index) => {
-      cy.wrap($el).should("have.text", str[index]);
-      cy.wrap($el).should("have.css", "border", firstState[index]);
+      cy.wrap($el).should("have.text", str[0][index]);
+      cy.wrap($el).should("have.css", "border", state[0][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get('div[class*="circle_circle"]').each(($el, index) => {
-      cy.wrap($el).should("have.text", secondstr[index]);
-      cy.wrap($el).should("have.css", "border", secondState[index]);
+      cy.wrap($el).should("have.text", str[1][index]);
+      cy.wrap($el).should("have.css", "border", state[1][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get('div[class*="circle_circle"]').each(($el, index) => {
-      cy.wrap($el).should("have.text", thirdstr[index]);
-      cy.wrap($el).should("have.css", "border", thirdState[index]);
+      cy.wrap($el).should("have.text", str[2][index]);
+      cy.wrap($el).should("have.css", "border", state[2][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get('div[class*="circle_circle"]').each(($el, index) => {
-      cy.wrap($el).should("have.text", endstr[index]);
+      cy.wrap($el).should("have.text", str[3][index]);
       cy.wrap($el).should("have.css", "border", "4px solid rgb(127, 224, 81)");
     });
   });
