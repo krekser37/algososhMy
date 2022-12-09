@@ -21,7 +21,7 @@ export const FibonacciPage: React.FC = () => {
   };
 
   const fib = (n: number): number[] => {
-    let arr: number[] = [1,1];
+    let arr: number[] = [1, 1];
     for (let i = 2; i < n + 1; i++) {
       arr.push(arr[i - 2] + arr[i - 1]);
     }
@@ -34,7 +34,7 @@ export const FibonacciPage: React.FC = () => {
     const arr = fib(Number(inputValue));
     for (let i = 0; i <= arr.length; i++) {
       await delay(SHORT_DELAY_IN_MS);
-      setArr(arr.slice(0,i));
+      setArr(arr.slice(0, i));
     }
     setLoader(false);
     setInputValue("");
@@ -43,7 +43,16 @@ export const FibonacciPage: React.FC = () => {
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <section className="sectionfib">
-        <Input maxLength={19} value={inputValue} onChange={onChangeValue} isLimitText ={true} max={19} type="number"data-cy="input"/>
+        <Input
+          maxLength={19}
+          value={inputValue}
+          onChange={onChangeValue}
+          isLimitText={true}
+          type="number"
+          min="0"
+          max="19"
+          data-cy="input"
+        />
         <Button
           text="Рассчитать"
           linkedList={"small"}
