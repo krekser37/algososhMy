@@ -7,7 +7,7 @@
 по нажатию на кнопку «Очистить» длина стека должна быть равна 0. */
 
 import { SHORT_DELAY_IN_MS } from "../../src/constants/delays";
-import { circle, defaultState, modifiedState } from "./constants";
+import { buttonadd, buttonclear, buttondelete, circle, defaultState, modifiedState } from "./constants";
 
 const inputValue = ["1234", "5", "977"];
 
@@ -25,9 +25,9 @@ describe("component stack", () => {
     cy.contains("Стек");
     cy.get('[data-cy="input"]').as("input");
     cy.get("button").as("button");
-    cy.get('[data-cy="submitadd"]').as("buttonadd");
-    cy.get('[data-cy="submitdelete"]').as("buttondelete");
-    cy.get('[data-cy="submitclear"]').as("buttonclear");
+    cy.get(buttonadd).as("buttonadd");
+    cy.get(buttondelete).as("buttondelete");
+    cy.get(buttonclear).as("buttonclear");
   });
 
   it("если в инпуте пусто, то кнопка добавления недоступна", () => {

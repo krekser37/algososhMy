@@ -1,5 +1,5 @@
 import { DELAY_IN_MS } from "../../src/constants/delays";
-import { circle } from "./constants";
+import { changeState, circle } from "./constants";
 
 const str = [
   [1, 2, 3, 4, 5, 6],
@@ -55,23 +55,19 @@ describe("component string", () => {
     cy.get("@input").type("123456").should("have.value", "123456");
     cy.get("@button").should("be.visible").click();
     cy.get(circle).each(($el, index) => {
-      cy.wrap($el).should("have.text", str[0][index]);
-      cy.wrap($el).should("have.css", "border", state[0][index]);
+      cy.wrap($el).should("have.text", str[0][index]).and("have.css", "border", state[0][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get(circle).each(($el, index) => {
-      cy.wrap($el).should("have.text", str[1][index]);
-      cy.wrap($el).should("have.css", "border", state[1][index]);
+      cy.wrap($el).should("have.text", str[1][index]).and("have.css", "border", state[1][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get(circle).each(($el, index) => {
-      cy.wrap($el).should("have.text", str[2][index]);
-      cy.wrap($el).should("have.css", "border", state[2][index]);
+      cy.wrap($el).should("have.text", str[2][index]).and("have.css", "border", state[2][index]);
     });
     cy.tick(DELAY_IN_MS);
     cy.get(circle).each(($el, index) => {
-      cy.wrap($el).should("have.text", str[3][index]);
-      cy.wrap($el).should("have.css", "border", "4px solid rgb(127, 224, 81)");
+      cy.wrap($el).should("have.text", str[3][index]).and("have.css", "border", changeState);
     });
   });
   afterEach(() => {
