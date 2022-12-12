@@ -27,9 +27,10 @@ import {
   tail,
   smallCircle,
   modifiedCircle,
+  changingCircle,
 } from "./constants";
 
-const inputValue = ["1", "2", "3"];
+const inputValue = ["1", "1111", "3"];
 
 describe("component list", () => {
   before(() => {
@@ -136,5 +137,36 @@ describe("component list", () => {
     cy.get(circle).should("have.css", "border", defaultState);
   });
 
-
+  it("Проверить корректность добавления элемента по индексу", () => {
+    cy.clock();
+    cy.get("@inputValue")
+      .type(inputValue[1])
+      .should("have.value", inputValue[1]);
+    cy.get("@inputIndex").type(2).should("have.value", 2);
+    cy.get("@buttonAddIndex").should("be.visible").click();
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(smallCircle)
+      .should("have.text", inputValue[1])
+      .should("have.css", "border", modifiedState);
+    cy.get(circle).eq(0).should("have.css", "border", modifiedState);
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(circle).each(($el, index) => {
+      if ([0, 2].includes(index)) {
+        cy.wrap($el).should("have.css", "border", modifiedState);
+      }
+    });
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(changingCircle).contains(inputValue[1]);
+    cy.get(circle).each(($el, index) => {
+      if ([3].includes(index)) {
+        cy.wrap($el).should("have.css", "border", changeState).and("have.text", inputValue[1]);
+      }
+    });
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(circle).each(($el, index) => {
+      cy.wrap($el)
+        .should("have.css", "border", defaultState)
+    }); 
+  });
 });

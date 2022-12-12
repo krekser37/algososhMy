@@ -107,11 +107,11 @@ export class LinkedList<T> implements ILinkedList<T> {
                    return;
                } else {*/
             const addNode = new Node(element);
-            if (index !== 0) {
+          /*   if (index !== 0) {
                 addNode.next = this.head;
                 this.head = addNode;
                 this.length++;
-            } else {
+            } else { */
                 console.log(index);
 
                 let curr = this.head;
@@ -128,7 +128,7 @@ export class LinkedList<T> implements ILinkedList<T> {
                     curr.next = addNode;
                 }
 
-            }
+          /*   } */
 
         }
 
