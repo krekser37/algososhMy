@@ -223,6 +223,7 @@ export const ListPage: React.FC = () => {
           onChange={onChangeValue}
           value={inputValue}
           disabled={disabled}
+          data-cy="inputValue"
         />
         <Button
           text="Добавить в head"
@@ -232,6 +233,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderAddHead}
           disabled={!inputValue}
+          data-cy="submitAddHead"
         />
         <Button
           text="Добавить в tail"
@@ -241,6 +243,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderAddTail}
           disabled={!inputValue}
+          data-cy="submitAddTail"
         />
         <Button
           text="Удалить из head"
@@ -250,6 +253,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderDeleteHead}
           disabled={arr.length === 0}
+          data-cy="submitDeleteHead"
         />
         <Button
           text="Удалить из tail"
@@ -259,6 +263,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderDeleteTail}
           disabled={arr.length === 0}
+          data-cy="submitDeleteTail"
         />
       </section>
       <section className={styles.section}>
@@ -271,6 +276,7 @@ export const ListPage: React.FC = () => {
           type="number"
           min="0"
           max={arr.length - 1}
+          data-cy="inputIndex"
         />
         <Button
           text="Добавить по индексу"
@@ -280,6 +286,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderAddIndex}
           disabled={!inputIndex || !inputValue}
+          data-cy="submitAddIndex"
         />
         <Button
           text="Удалить по индексу"
@@ -289,6 +296,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderDeleteIndex}
           disabled={!inputIndex}
+          data-cy="submitDeleteIndex"
         />
       </section>
       <ul className="list">
