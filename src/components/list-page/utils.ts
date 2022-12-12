@@ -40,6 +40,7 @@ export class LinkedList<T> implements ILinkedList<T> {
         if (!this.head || !this.tail) {
             this.head = node;
             this.tail = node;
+            this.length++;
             return this;
         }
         this.tail.next = node;

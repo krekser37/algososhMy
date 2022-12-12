@@ -26,6 +26,7 @@ import {
   indexCircle,
   tail,
   smallCircle,
+  modifiedCircle,
 } from "./constants";
 
 const inputValue = ["1", "2", "3"];
@@ -122,12 +123,18 @@ describe("component list", () => {
       .should("have.text", inputValue[2])
       .should("have.css", "border", modifiedState);
     cy.tick(SHORT_DELAY_IN_MS);
-/*     cy.get(circle).each(($el, index) => {
-      cy.get(circle).should("have.css", "border", changeState);
-    }); */
-
-    //cy.tick(SHORT_DELAY_IN_MS);
-    //cy.get(circle).eq(1).should("have.css", "border", defaultState);
+    cy.get(modifiedCircle);
+    cy.get(circle)
+      .last()
+      .should("have.text", inputValue[2])
+      .should("have.css", "border", changeState)
+      .siblings(head)
+      .should("not.have.text")
+      .siblings(tail)
+      .should("have.text", "tail");
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(circle).should("have.css", "border", defaultState);
   });
-});
 
+
+});

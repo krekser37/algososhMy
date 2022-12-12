@@ -2,7 +2,8 @@ export const circle = 'div[class*="circle_circle"]';
 export const head = '[class*="circle_head"]';
 export const tail = 'div[class*="circle_tail"]';
 export const indexCircle = 'p[class*="circle_index"]';
-export const smallCircle = 'div [class*=circle_small]'; //class*=small
+export const smallCircle = 'div [class*=circle_small]';
+export const modifiedCircle = 'div [class*=circle_modified]';
 
 export const buttonclear = '[data-cy="submitclear"]';
 export const buttondelete = '[data-cy="submitdelete"]';
