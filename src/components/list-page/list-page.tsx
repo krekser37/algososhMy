@@ -111,9 +111,9 @@ export const ListPage: React.FC = () => {
   const onClickDeleteTail = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteTail: true });
-    setCurrentElement(arr[arr.length - 1]);
+    setCurrentElement(arr[arr.length-1]);
     setSmallCircleLocation(Location.bottom);
-    setSmallCircleIndex(arr.length);
+    setSmallCircleIndex(arr.length-1);
     setArr((arr) => [...arr.slice(0, arr.length - 1), ""]);
     await delay(SHORT_DELAY_IN_MS);
     list.current.deleteTail();

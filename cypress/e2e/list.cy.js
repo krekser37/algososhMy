@@ -31,6 +31,7 @@ import {
 } from "./constants";
 
 const inputValue = ["1", "1111", "3"];
+const indexValue = 2;
 
 describe("component list", () => {
   before(() => {
@@ -142,7 +143,7 @@ describe("component list", () => {
     cy.get("@inputValue")
       .type(inputValue[1])
       .should("have.value", inputValue[1]);
-    cy.get("@inputIndex").type(2).should("have.value", 2);
+    cy.get("@inputIndex").type(indexValue).should("have.value", indexValue);
     cy.get("@buttonAddIndex").should("be.visible").click();
     cy.tick(SHORT_DELAY_IN_MS);
     cy.tick(SHORT_DELAY_IN_MS);
@@ -160,13 +161,75 @@ describe("component list", () => {
     cy.get(changingCircle).contains(inputValue[1]);
     cy.get(circle).each(($el, index) => {
       if ([3].includes(index)) {
-        cy.wrap($el).should("have.css", "border", changeState).and("have.text", inputValue[1]);
+        cy.wrap($el)
+          .should("have.css", "border", changeState)
+          .and("have.text", inputValue[1]);
       }
     });
     cy.tick(SHORT_DELAY_IN_MS);
     cy.get(circle).each(($el, index) => {
-      cy.wrap($el)
-        .should("have.css", "border", defaultState)
-    }); 
+      cy.wrap($el).should("have.css", "border", defaultState);
+    });
+  });
+
+  it("Проверить удаление элемента по индексу", () => {
+    cy.clock();
+    cy.get("@inputIndex").type(indexValue).should("have.value", indexValue);
+    cy.get("@buttonDeleteIndex").should("be.visible").click();
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(circle).first().should("have.css", "border", modifiedState);
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(circle).each(($el, index) => {
+      if ([1, indexValue].includes(index)) {
+        cy.wrap($el).should("have.css", "border", modifiedState);
+      }
+    });
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(smallCircle)
+      .should("have.text", inputValue[1])
+      .should("have.css", "border", modifiedState);
+    cy.get(circle).each(($el, index) => {
+      if ([indexValue].includes(index)) {
+        cy.wrap($el).should("not.have.text");
+      }
+    });
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(smallCircle).should("not.exist");
+    cy.get(circle).each(($el, index) => {
+      cy.wrap($el).should("not.to.be.empty");
+    });
+  });
+
+    it("Проверить удаление элемента из head", () => {
+    cy.clock();
+    cy.get(circle).each(($el, index) => {
+      if ([0].includes(index)) {
+        const elValue = $el[0].textContent;
+        cy.get("@buttonDeleteHead").should("be.visible").click();
+        cy.get(smallCircle)
+          .should("have.text", elValue)
+          .should("have.css", "border", modifiedState);
+        cy.wrap($el).should("not.have.text");
+      }
+    });
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(smallCircle).should("not.exist");
+    cy.get(circle).each(($el, index) => {
+      cy.wrap($el).should("not.to.be.empty");
+    });
+  });
+
+  it("Проверить удаление элемента из tail", () => {
+    cy.clock();
+    cy.get("@buttonDeleteTail").should("be.visible").click();
+    cy.get(circle).last().prev().should("have.text", "");
+    cy.get(smallCircle)
+      .should("have.text", inputValue[2])
+      .should("have.css", "border", modifiedState);
+    cy.tick(SHORT_DELAY_IN_MS);
+    cy.get(smallCircle).should("not.exist");
+    cy.get(circle).each(($el, index) => {
+      cy.wrap($el).should("not.to.be.empty");
+    });
   });
 });
