@@ -61,5 +61,4 @@ it("render circle with state = modified",()=>{
     const circle=renderer.create(<Circle state={ElementStates.Modified}/>).toJSON();
     expect(circle).toMatchSnapshot();
 })
-
 })
