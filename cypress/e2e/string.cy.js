@@ -37,7 +37,7 @@ const state = [
 
 describe("component string", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/recursion");
+    cy.visit("/recursion");
     cy.contains("Строка");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="submit"]').as("button");

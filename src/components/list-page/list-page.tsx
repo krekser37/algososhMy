@@ -111,9 +111,9 @@ export const ListPage: React.FC = () => {
   const onClickDeleteTail = async () => {
     setDisabled(true);
     setLoader({ ...loader, loaderDeleteTail: true });
-    setCurrentElement(arr[arr.length-1]);
+    setCurrentElement(arr[arr.length - 1]);
     setSmallCircleLocation(Location.bottom);
-    setSmallCircleIndex(arr.length-1);
+    setSmallCircleIndex(arr.length - 1);
     setArr((arr) => [...arr.slice(0, arr.length - 1), ""]);
     await delay(SHORT_DELAY_IN_MS);
     list.current.deleteTail();
@@ -272,7 +272,7 @@ export const ListPage: React.FC = () => {
           placeholder="Введите индекс"
           onChange={onChangeIndex}
           value={inputIndex}
-          disabled={disabled}
+          disabled={disabled }
           type="number"
           min="0"
           max={arr.length - 1}
@@ -285,7 +285,7 @@ export const ListPage: React.FC = () => {
             onClickAddIndex();
           }}
           isLoader={loader.loaderAddIndex}
-          disabled={!inputIndex || !inputValue}
+          disabled={!inputIndex || !inputValue || Number(inputIndex) > arr.length - 1}
           data-cy="submitAddIndex"
         />
         <Button
@@ -295,11 +295,11 @@ export const ListPage: React.FC = () => {
             onClickDeleteIndex();
           }}
           isLoader={loader.loaderDeleteIndex}
-          disabled={!inputIndex}
+          disabled={!inputIndex || Number(inputIndex) > arr.length-1}
           data-cy="submitDeleteIndex"
         />
       </section>
-      <ul className="list">
+      <ul className={styles.list}>
         {arr &&
           arr?.map((item, index) => {
             return (

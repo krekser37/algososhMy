@@ -108,7 +108,7 @@ export const StackPage: React.FC = () => {
           data-cy="submitclear"
         />
       </section>
-      <ul className="list">
+      <ul className={styles.list}>
         {arr &&
           arr?.map((item, index) => {
             return (

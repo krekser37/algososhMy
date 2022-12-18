@@ -10,7 +10,7 @@ const fibNumbers = [
 
 describe("component fibonacci", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000/fibonacci");
+    cy.visit("/fibonacci");
     cy.contains("Последовательность Фибоначчи");
     cy.get('[data-cy="input"]').as("input");
     cy.get('[data-cy="submit"]').as("button");

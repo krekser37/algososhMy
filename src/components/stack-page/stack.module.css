@@ -14,3 +14,16 @@ margin-left: 12px;
 .button:last-of-type{
     margin-left: 80px;
 }
+
+.list {
+    display: flex;
+    list-style-type: none;
+    margin: 120px auto 100px;
+    justify-content: center;
+    column-gap: 16px;
+    row-gap: 78px;
+    padding: 0;
+    max-width: 944px;
+    flex-wrap: wrap;
+  }
+  

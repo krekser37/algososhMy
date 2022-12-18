@@ -12,7 +12,7 @@ import { randomArr } from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [arr, setArr] = useState<TArraySort[]>([]);
+  const [arr, setArr] = useState<TArraySort[]>(randomArr());
   const [radioInput, setRadioInput] = useState("choice");
   const [sorting, setSorting] = useState<Direction>();
 

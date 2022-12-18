@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import "./fibonacci-page.css";
+import styles from "./fibonacci-page.module.css";
 
 export const FibonacciPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -42,15 +42,15 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <section className="sectionfib">
+      <section className={styles.sectionfib}>
         <Input
-          maxLength={19}
+          // maxLength={19}
           value={inputValue}
           onChange={onChangeValue}
           isLimitText={true}
-          type="number"
-          min="0"
-          max="19"
+          type={"number"}
+          min={1}
+          max={19}
           data-cy="input"
         />
         <Button
@@ -58,11 +58,13 @@ export const FibonacciPage: React.FC = () => {
           linkedList={"small"}
           onClick={onClick}
           isLoader={loader}
-          disabled={!inputValue}
+          disabled={
+            !inputValue || Number(inputValue) > 19 || Number(inputValue) < 1
+          }
           data-cy="submit"
         />
       </section>
-      <ul className="listfib">
+      <ul className={styles.listfib}>
         {arr &&
           arr?.map((item, index) => {
             return (

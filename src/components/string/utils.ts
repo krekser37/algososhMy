@@ -43,6 +43,3 @@ export const reverseString = (string: string):string[]=> {
   }
   return array;
 }; */
-/* 
-console.log('1234', reverseString('1234'));
-console.log('12345', reverseString('12345')); */

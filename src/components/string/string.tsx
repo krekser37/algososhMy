@@ -3,7 +3,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Circle } from "../ui/circle/circle";
-import "./string.css";
+import styles from "./string.module.css";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { delay, swap } from "../../utils/utils";
 import { getState } from "./utils";
@@ -45,7 +45,7 @@ export const StringComponent: React.FC = () => {
 
   return (
     <SolutionLayout title="Строка">
-      <section className="section">
+      <section className={styles.section}>
         <Input
           maxLength={11}
           value={inputValue}
@@ -63,7 +63,7 @@ export const StringComponent: React.FC = () => {
           data-cy="submit"
         />
       </section>
-      <ul className="list">
+      <ul className={styles.list}>
         {reverseInputValue &&
           reverseInputValue?.map((item, index) => {
             return (

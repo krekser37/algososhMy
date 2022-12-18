@@ -24,22 +24,9 @@ import {
 } from "./constants";
 const inputValue = ["1", "2", "3"];
 
-/* const addArray = () => {
-  cy.clock();
-  cy.get("@input").type(inputValue[0]).should("have.value", inputValue[0]);
-  cy.get("@buttonadd").should("be.visible").click();
-  cy.tick(SHORT_DELAY_IN_MS);
-  cy.get("@input").type(inputValue[1]).should("have.value", inputValue[1]);
-  cy.get("@buttonadd").should("be.visible").click();
-  cy.tick(SHORT_DELAY_IN_MS);
-  cy.get("@input").type(inputValue[2]).should("have.value", inputValue[2]);
-  cy.get("@buttonadd").should("be.visible").click();
-  cy.tick(SHORT_DELAY_IN_MS);
-}; */
-
 describe("component queue", () => {
   before(() => {
-    cy.visit("http://localhost:3000/queue");
+    cy.visit("/queue");
     cy.contains("Очередь");
   });
 

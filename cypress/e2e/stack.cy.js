@@ -21,7 +21,7 @@ describe("component stack", () => {
     cy.get("@buttonadd").should("be.visible").click();
   };
   beforeEach(() => {
-    cy.visit("http://localhost:3000/stack");
+    cy.visit("/stack");
     cy.contains("Стек");
     cy.get('[data-cy="input"]').as("input");
     cy.get("button").as("button");

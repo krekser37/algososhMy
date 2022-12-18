@@ -35,7 +35,7 @@ const indexValue = 2;
 
 describe("component list", () => {
   before(() => {
-    cy.visit("http://localhost:3000/list");
+    cy.visit("/list");
     cy.contains("Связный список");
   });
 
