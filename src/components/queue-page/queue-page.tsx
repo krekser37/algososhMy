@@ -72,6 +72,7 @@ export const QueuePage: React.FC = () => {
           type="text"
           isLimitText={true}
           extraClass={styles.input}
+          data-cy="input"
         />
         <Button
           text="Добавить"
@@ -82,6 +83,7 @@ export const QueuePage: React.FC = () => {
           isLoader={loader.add}
           disabled={!inputValue || queue.current.isFull()}
           extraClass={styles.button}
+          data-cy="submitadd"
         />
         <Button
           text="Удалить"
@@ -92,6 +94,7 @@ export const QueuePage: React.FC = () => {
           isLoader={loader.delete}
           disabled={disabled || queue.current.isEmpty()}
           extraClass={styles.button}
+          data-cy="submitdelete"
         />
         <Button
           text="Очистить"
@@ -103,9 +106,10 @@ export const QueuePage: React.FC = () => {
           isLoader={loader.clear}
           disabled={disabled || queue.current.getTail() ===0}
           extraClass={styles.button}
+          data-cy="submitclear"
         />
       </section>
-      <ul className="list">
+      <ul className={styles.list}>
         {arr &&
           arr?.map((item, index) => {
             return (

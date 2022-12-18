@@ -12,7 +12,7 @@ import { randomArr } from "./utils";
 
 export const SortingPage: React.FC = () => {
   const [loader, setLoader] = useState(false);
-  const [arr, setArr] = useState<TArraySort[]>([]);
+  const [arr, setArr] = useState<TArraySort[]>(randomArr());
   const [radioInput, setRadioInput] = useState("choice");
   const [sorting, setSorting] = useState<Direction>();
 
@@ -26,6 +26,7 @@ export const SortingPage: React.FC = () => {
 
   const sortingOnClick = (sorting: Direction) => {
     setSorting(sorting);
+    setLoader(true);
     if (radioInput === "choice") {
       choiceSort(arr, sorting);
     } else {
@@ -34,8 +35,6 @@ export const SortingPage: React.FC = () => {
   };
 
   const choiceSort = async (arr: TArraySort[], sorting: Direction) => {
-    setLoader(true);
-
     for (let i = 0; i < arr.length; i++) {
       let index = i;
       for (let j = i + 1; j < arr.length; j++) {
@@ -68,9 +67,9 @@ export const SortingPage: React.FC = () => {
     setLoader(false);
   };
 
-  const bubbleSort = async (arr: TArraySort[], sorting: Direction) => {
-    setLoader(true);
 
+
+  const bubbleSort = async (arr: TArraySort[], sorting: Direction) => {
     for (let i = 0; i < arr.length; i++) {
       for (let j = 0; j < arr.length - i - 1; j++) {
         arr[j].color = ElementStates.Changing;
