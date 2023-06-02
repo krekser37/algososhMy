@@ -5,7 +5,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
-import "./fibonacci-page.css";
+import styles from "./fibonacci-page.module.css";
 
 export const FibonacciPage: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -21,7 +21,7 @@ export const FibonacciPage: React.FC = () => {
   };
 
   const fib = (n: number): number[] => {
-    let arr: number[] = [1,1];
+    let arr: number[] = [1, 1];
     for (let i = 2; i < n + 1; i++) {
       arr.push(arr[i - 2] + arr[i - 1]);
     }
@@ -34,7 +34,7 @@ export const FibonacciPage: React.FC = () => {
     const arr = fib(Number(inputValue));
     for (let i = 0; i <= arr.length; i++) {
       await delay(SHORT_DELAY_IN_MS);
-      setArr(arr.slice(0,i));
+      setArr(arr.slice(0, i));
     }
     setLoader(false);
     setInputValue("");
@@ -42,21 +42,33 @@ export const FibonacciPage: React.FC = () => {
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
-      <section className="sectionfib">
-        <Input maxLength={19} value={inputValue} onChange={onChangeValue} isLimitText ={true} max={19} type="number"/>
+      <section className={styles.sectionfib}>
+        <Input
+          // maxLength={19}
+          value={inputValue}
+          onChange={onChangeValue}
+          isLimitText={true}
+          type={"number"}
+          min={1}
+          max={19}
+          data-cy="input"
+        />
         <Button
           text="Рассчитать"
           linkedList={"small"}
           onClick={onClick}
           isLoader={loader}
-          disabled={!inputValue}
+          disabled={
+            !inputValue || Number(inputValue) > 19 || Number(inputValue) < 1
+          }
+          data-cy="submit"
         />
       </section>
-      <ul className="listfib">
+      <ul className={styles.listfib}>
         {arr &&
           arr?.map((item, index) => {
             return (
-              <li className="" key={index}>
+              <li className="" key={index} data-cy="circle">
                 <Circle letter={String(item)} index={index} />
               </li>
             );

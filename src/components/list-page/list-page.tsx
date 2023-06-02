@@ -113,7 +113,7 @@ export const ListPage: React.FC = () => {
     setLoader({ ...loader, loaderDeleteTail: true });
     setCurrentElement(arr[arr.length - 1]);
     setSmallCircleLocation(Location.bottom);
-    setSmallCircleIndex(arr.length);
+    setSmallCircleIndex(arr.length - 1);
     setArr((arr) => [...arr.slice(0, arr.length - 1), ""]);
     await delay(SHORT_DELAY_IN_MS);
     list.current.deleteTail();
@@ -223,6 +223,7 @@ export const ListPage: React.FC = () => {
           onChange={onChangeValue}
           value={inputValue}
           disabled={disabled}
+          data-cy="inputValue"
         />
         <Button
           text="Добавить в head"
@@ -232,6 +233,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderAddHead}
           disabled={!inputValue}
+          data-cy="submitAddHead"
         />
         <Button
           text="Добавить в tail"
@@ -241,6 +243,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderAddTail}
           disabled={!inputValue}
+          data-cy="submitAddTail"
         />
         <Button
           text="Удалить из head"
@@ -250,6 +253,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderDeleteHead}
           disabled={arr.length === 0}
+          data-cy="submitDeleteHead"
         />
         <Button
           text="Удалить из tail"
@@ -259,6 +263,7 @@ export const ListPage: React.FC = () => {
           }}
           isLoader={loader.loaderDeleteTail}
           disabled={arr.length === 0}
+          data-cy="submitDeleteTail"
         />
       </section>
       <section className={styles.section}>
@@ -267,10 +272,11 @@ export const ListPage: React.FC = () => {
           placeholder="Введите индекс"
           onChange={onChangeIndex}
           value={inputIndex}
-          disabled={disabled}
+          disabled={disabled }
           type="number"
           min="0"
           max={arr.length - 1}
+          data-cy="inputIndex"
         />
         <Button
           text="Добавить по индексу"
@@ -279,7 +285,8 @@ export const ListPage: React.FC = () => {
             onClickAddIndex();
           }}
           isLoader={loader.loaderAddIndex}
-          disabled={!inputIndex || !inputValue}
+          disabled={!inputIndex || !inputValue || Number(inputIndex) > arr.length - 1}
+          data-cy="submitAddIndex"
         />
         <Button
           text="Удалить по индексу"
@@ -288,10 +295,11 @@ export const ListPage: React.FC = () => {
             onClickDeleteIndex();
           }}
           isLoader={loader.loaderDeleteIndex}
-          disabled={!inputIndex}
+          disabled={!inputIndex || Number(inputIndex) > arr.length-1}
+          data-cy="submitDeleteIndex"
         />
       </section>
-      <ul className="list">
+      <ul className={styles.list}>
         {arr &&
           arr?.map((item, index) => {
             return (
