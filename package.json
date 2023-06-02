@@ -25,7 +25,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "cypress:open": "./node_modules/.bin/cypress open"
+    "cypress:open": "./node_modules/.bin/cypress open",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -53,6 +55,7 @@
     "cypress": "^11.2.0",
     "eslint-plugin-cypress": "^2.12.1",
     "fetch-mock": "^9.11.0",
+    "gh-pages": "^5.0.0",
     "jest": "^29.3.1",
     "react-test-renderer": "^18.2.0",
     "redux-mock-store": "^1.5.4"
