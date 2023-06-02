@@ -202,10 +202,10 @@
 
 <a name='stack'>**Стэк технологий**</a>
 
-<img src="https://img.shields.io/badge/HTML-696969?style=for-the-badge&logo=HTML5&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/CSS3-696969?style=for-the-badge&logo=CSS3&logoColor=blue"> <img src="https://img.shields.io/badge/JavaScript-696969?style=for-the-badge&logo=JavaScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React-696969?style=for-the-badge&logo=React&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React Router-696969?style=for-the-badge&logo=React Router&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Webpack-696969?style=for-the-badge&logo=Webpack&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/TypeScript-696969?style=for-the-badge&logo=TypeScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/npm-696969?style=for-the-badge&logo=npm&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/github-696969?style=for-the-badge&logo=github&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Visual Studio Code-696969?style=for-the-badge&logo=Visual Studio Code&logoColor=#F7DF1E">
+<img src="https://img.shields.io/badge/HTML-696969?style=for-the-badge&logo=HTML5&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/CSS3-696969?style=for-the-badge&logo=CSS3&logoColor=blue"> <img src="https://img.shields.io/badge/BEM-696969?style=for-the-badge&logo=BEM&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/JavaScript-696969?style=for-the-badge&logo=JavaScript&logoColor=#F7DF1E">  <img src="https://img.shields.io/badge/github-696969?style=for-the-badge&logo=github&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Visual Studio Code-696969?style=for-the-badge&logo=Visual Studio Code&logoColor=#F7DF1E">
+  
+ <a name='project'>**Ссылка на проект GitHub Pages**</a>
 
-<a name='project'>**Ссылка на проект GitHub Pages**</a>
-
-- [Ссылка на проект GitHub Pages](https://krekser37.github.io/algososhMy/)
+* [Ссылка на проект GitHub Pages](https://krekser37.github.io/algososhMy/)
 
 Спасибо!
