@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { HashRouter, Route, Routes } from "react-router-dom";
 import { FibonacciPage } from "../fibonacci-page/fibonacci-page";
 import { ListPage } from "../list-page/list-page";
 import { MainPage } from "../main-page/main-page";
@@ -9,10 +9,11 @@ import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 import styles from "./app.module.css";
 
+
 function App() {
   return (
     <div className={styles.app}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<MainPage />}></Route>
           <Route path="/recursion" element={<StringComponent />}></Route>
@@ -22,7 +23,7 @@ function App() {
           <Route path="/queue" element={<QueuePage />}></Route>
           <Route path="/list" element={<ListPage />}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 }
