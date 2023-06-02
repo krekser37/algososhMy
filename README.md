@@ -1,10 +1,10 @@
 # Проект. МБОУ АЛГОСОШ им. Фибоначчи
 
-* [Макет в Figma](#figma)
-* [Какие навыки приобрела в этом спринте](#skills)
-* [Описание проекта](#about)
-* [Стэк технологий](#stack)
-* [Ссылка на проект GitHub Pages](https://krekser37.github.io/St_burgers/)
+- [Макет в Figma](#figma)
+- [Какие навыки приобрела в этом спринте](#skills)
+- [Описание проекта](#about)
+- [Стэк технологий](#stack)
+- [Ссылка на проект GitHub Pages](https://krekser37.github.io/St_burgers/)
 
 <a name='figma'>**Макет в Figma**</a>
 
@@ -12,7 +12,7 @@
 
 <a name='skills'>**Какие навыки приобрела в этом спринте**</a>
 
-1. Научилась создавать и структурировать проект на React. 
+1. Научилась создавать и структурировать проект на React.
 2. Научилась создавать компоненты и управлять потоками данных.
 3. Освоила функциональный подход к разработке на React и написала код с помощью хуков.
 4. Освоила алгоритмические подходы к решению задач.
@@ -22,7 +22,6 @@
 8. Ознакомилась с линейными структурами данных: стек, очереди, списки.
 9. Научилась определять оптимальные для работы приложения алгоритмы, что поможет существенно ускорить время вычислений и уменьшить объём используемой памяти.
 10. Продолжила применять TypeScript.
-
 
 <a name='about'>**Описание проекта**</a>
 
@@ -36,7 +35,7 @@
 
 ![Начальное состояние страницы](README_static/Untitled.png)
 
-Введите текст в инпут и нажмите развернуть. 
+Введите текст в инпут и нажмите развернуть.
 
 Сначала на экране появляется слово, буквы которого записаны в синие кружки.
 
@@ -44,7 +43,7 @@
 
 Строка в исходном виде
 
-Два кандидата на сортировку подсвечены цветом `#D252E1`. Уже отсортированные элементы выделены `#7FE051`. 
+Два кандидата на сортировку подсвечены цветом `#D252E1`. Уже отсортированные элементы выделены `#7FE051`.
 
 На скриншоте показана строка, в которой поменяли местами крайние символы:
 
@@ -54,10 +53,11 @@
 
 Выделение повторяется, пока полностью не развернётся строка.
 Анимация выполняется плавно.
+
 </details>
 
 <details><summary>Последовательность Фибоначчи</summary>
-На этом экране предстоит сгенерировать `n` чисел последовательности Фибоначчи. 
+На этом экране предстоит сгенерировать `n` чисел последовательности Фибоначчи.
 
 ![Начальное состояние страницы](README_static/Untitled%203.png)
 
@@ -71,9 +71,9 @@
 
 Сгенерированная последовательность
 
-Анимация выполняется плавно. 
-</details>
+Анимация выполняется плавно.
 
+</details>
 
 <details><summary>Сортировка массива</summary>
 На этом экране визуализированы алгоритмы сортировки выбором и пузырьком по возрастанию или по убыванию.
@@ -87,6 +87,7 @@
 Когда нажимаете «По убыванию» или «По возрастанию», запускается процесс сортировки в зависимости от выбранного способа: выбором или пузырьком.
 
 Сортировка массива выполняется плавно.
+
 </details>
 
 <details><summary>Стек</summary>
@@ -99,17 +100,18 @@
 
 Если ввести в инпут значение и нажать «Добавить», в стеке появляется первый элемент, который необходимо отрисовать на странице.
 
-Инпут очищается после добавления элемента в стек. 
+Инпут очищается после добавления элемента в стек.
 
 При добавлении ещё одного элемента справа от предыдущего появляется Circle с новым значением и индексом 1. И теперь уже над ним отображается подпись `top`. В момент добавления на долю секунды подсвечивается новый элемент цветом `#D252E1`.
 
 Если в инпуте нет числа, по клику на кнопку «Добавить» метод `push(item)` не вызывается.
 
-Если нажать «Удалить», из стека извлекается только верхний элемент. Удаляемый элемент выделяется цветом, надпись `top` перемещается на его левого соседа. 
+Если нажать «Удалить», из стека извлекается только верхний элемент. Удаляемый элемент выделяется цветом, надпись `top` перемещается на его левого соседа.
 
-Если в стеке всего один элемент, то после нажатия «Удалить» на странице не отображаются никакие элементы стека. 
+Если в стеке всего один элемент, то после нажатия «Удалить» на странице не отображаются никакие элементы стека.
 
 По клику на кнопку «Очистить» из стека удаляются все элементы сразу.
+
 </details>
 
 <details><summary>Очередь</summary>
@@ -136,11 +138,12 @@
 ![Очередь после `dequeue();`](README_static/Untitled%2010.png)
 
 Очередь после `dequeue();`
+
 </details>
 
 <details><summary>Связный список</summary>
 
-На этом экране реализованы удаление и добавление элементов в связный список. 
+На этом экране реализованы удаление и добавление элементов в связный список.
 
 ![Начальное состояние страницы](README_static/Untitled%2011.png)
 
@@ -160,7 +163,7 @@
 
 **При добавлении в tail** элемент появляется в хвосте над элементом с надписью tail. Затем он занимает последнее место в списке и на долю секунды выделяется зелёным цветом. Теперь под новым элементом написано tail.
 
-**При добавлении элемента по индексу** должны быть заполнены два поля: «Введите значение» и «Введите индекс». Вся анимация выполняется поэтапно: 
+**При добавлении элемента по индексу** должны быть заполнены два поля: «Введите значение» и «Введите индекс». Вся анимация выполняется поэтапно:
 
 - По клику на «Добавить по индексу» новый элемент отображается над первым элементом.
 - Пока ищем нужный индекс, поочерёдно подсвечиваются элементы. Добавляемый элемент перепрыгивает по списку до искомого индекса.
@@ -193,14 +196,15 @@
 Удаление элемента из tail
 
 При удалении новый элемент отображать под элементами списка.
+
 </details>
 
 <a name='stack'>**Стэк технологий**</a>
 
-  <img src="https://img.shields.io/badge/HTML-696969?style=for-the-badge&logo=HTML5&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/CSS3-696969?style=for-the-badge&logo=CSS3&logoColor=blue">  <img src="https://img.shields.io/badge/JavaScript-696969?style=for-the-badge&logo=JavaScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React-696969?style=for-the-badge&logo=React&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React Router-696969?style=for-the-badge&logo=React Router&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Redux-696969?style=for-the-badge&logo=Redux&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Webpack-696969?style=for-the-badge&logo=Webpack&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/TypeScript-696969?style=for-the-badge&logo=TypeScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/npm-696969?style=for-the-badge&logo=npm&logoColor=#F7DF1E">  <img src="https://img.shields.io/badge/github-696969?style=for-the-badge&logo=github&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Visual Studio Code-696969?style=for-the-badge&logo=Visual Studio Code&logoColor=#F7DF1E">
+<img src="https://img.shields.io/badge/HTML-696969?style=for-the-badge&logo=HTML5&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/CSS3-696969?style=for-the-badge&logo=CSS3&logoColor=blue"> <img src="https://img.shields.io/badge/JavaScript-696969?style=for-the-badge&logo=JavaScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React-696969?style=for-the-badge&logo=React&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/React Router-696969?style=for-the-badge&logo=React Router&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Redux-696969?style=for-the-badge&logo=Redux&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Webpack-696969?style=for-the-badge&logo=Webpack&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/TypeScript-696969?style=for-the-badge&logo=TypeScript&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/npm-696969?style=for-the-badge&logo=npm&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/github-696969?style=for-the-badge&logo=github&logoColor=#F7DF1E"> <img src="https://img.shields.io/badge/Visual Studio Code-696969?style=for-the-badge&logo=Visual Studio Code&logoColor=#F7DF1E">
 
 <a name='project'>**Ссылка на проект GitHub Pages**</a>
 
-* [Ссылка на проект GitHub Pages](https://krekser37.github.io/St_burgers/)
+- [Ссылка на проект GitHub Pages](https://krekser37.github.io/St_burgers/)
 
 Спасибо!
